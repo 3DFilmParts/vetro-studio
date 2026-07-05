@@ -19,24 +19,25 @@
   header > div:last-child { margin-left: auto !important; gap: 16px !important; }
   div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
   section[style*="grid-template-columns"] { grid-template-columns: 1fr !important; gap: 40px !important; }
-  div[style*="columns:3"] { columns: 2 !important; column-gap: 14px !important; }
-  div[style*="columns:3"] figcaption { flex-direction: column !important; gap: 2px !important; align-items: flex-start !important; }
-  div[style*="position:sticky"] { position: static !important; }
-  section[style*="padding:96px 48px"], div[style*="padding:96px 48px"] { padding: 56px 20px !important; }
-  section[style*="padding:48px 48px 96px"] { padding: 32px 20px 64px !important; }
-  section[style*="padding:0 48px 96px"] { padding: 0 20px 64px !important; }
-  section[style*="padding:96px 48px 64px"] { padding: 56px 20px 40px !important; }
-  section[style*="padding:72px 48px 96px"], div[style*="padding:72px 48px 96px"] { padding: 48px 20px 64px !important; }
-  section[style*="padding:120px 48px"] { padding: 72px 20px !important; }
-  div[style*="padding:72px 64px"] { padding: 40px 22px !important; }
+  div[style*="columns: 3"] { columns: 2 !important; column-gap: 14px !important; }
+  div[style*="columns: 3"] figcaption { flex-direction: column !important; gap: 2px !important; align-items: flex-start !important; }
+  div[style*="position: sticky"] { position: static !important; }
+  section[style*="padding: 96px 48px"], div[style*="padding: 96px 48px"] { padding: 56px 20px !important; }
+  section[style*="padding: 48px 48px 96px"] { padding: 32px 20px 64px !important; }
+  section[style*="padding: 0 48px 96px"] { padding: 0 20px 64px !important; }
+  section[style*="padding: 96px 48px 64px"] { padding: 56px 20px 40px !important; }
+  section[style*="padding: 72px 48px 96px"], div[style*="padding: 72px 48px 96px"] { padding: 48px 20px 64px !important; }
+  section[style*="padding: 120px 48px"] { padding: 72px 20px !important; }
+  div[style*="padding: 72px 64px"] { padding: 40px 22px !important; }
   footer { padding: 48px 20px 24px !important; }
-  section[style*="min-height:78vh"] { min-height: 68vh !important; }
+  section[style*="min-height: 78vh"] { min-height: 68vh !important; }
   .vs-heropanel { margin: 0 12px 20px !important; padding: 22px 20px !important; max-width: none !important; gap: 12px !important; }
   .vs-heropanel h1 { font-size: 30px !important; }
   .vs-heropanel p { font-size: 14px !important; line-height: 1.5 !important; }
   .vs-heropanel > div { flex-wrap: wrap !important; gap: 10px !important; }
   .vs-heropanel > div > span { padding: 12px 20px !important; }
-  span[style*="right:48px"][style*="bottom:40px"] { right: 16px !important; bottom: 12px !important; }
+  span[style*="right: 48px"][style*="bottom: 40px"] { right: 16px !important; bottom: 12px !important; }
+  section[style*="min-height: 78vh"] img { object-position: 72% 50% !important; }
 }
 </style></helmet>
 
@@ -597,10 +598,15 @@
   </sc-if>
 
   <sc-if value="{{ lightboxOpen }}" hint-placeholder-val="{{ false }}">
-    <div onClick="{{ closeLightbox }}" style="position: fixed; inset: 0; background: rgba(33,26,23,0.94); z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 20px; cursor: pointer;">
-      <img src="{{ lightboxSrc }}" alt="{{ lightboxAlt }}" style="max-width: 100%; max-height: 78vh; object-fit: contain; display: block;">
+    <div onClick="{{ closeLightbox }}" onTouchStart="{{ lbTouchStart }}" onTouchEnd="{{ lbTouchEnd }}" style="position: fixed; inset: 0; background: rgba(33,26,23,0.94); z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 20px 64px; cursor: pointer;">
+      <img src="{{ lightboxSrc }}" alt="{{ lightboxAlt }}" style="max-width: 100%; max-height: 74vh; object-fit: contain; display: block;">
       <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #FAF7F2; text-align: center;">{{ lightboxCaption }}</span>
-      <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #FAF7F2; border-bottom: 1px solid #FAF7F2; padding-bottom: 3px;">Close ×</span>
+      <div style="display: flex; gap: 28px; align-items: baseline;">
+        <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">{{ lightboxCounter }}</span>
+        <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #FAF7F2; border-bottom: 1px solid #FAF7F2; padding-bottom: 3px;">Close ×</span>
+      </div>
+      <span onClick="{{ prevLightbox }}" style="position: absolute; left: 0; top: 0; bottom: 0; width: 60px; display: flex; align-items: center; justify-content: center; font: 300 40px/1 'Cormorant Garamond', serif; color: #FAF7F2; cursor: pointer;" style-hover="opacity: 0.7;">←</span>
+      <span onClick="{{ nextLightbox }}" style="position: absolute; right: 0; top: 0; bottom: 0; width: 60px; display: flex; align-items: center; justify-content: center; font: 300 40px/1 'Cormorant Garamond', serif; color: #FAF7F2; cursor: pointer;" style-hover="opacity: 0.7;">→</span>
     </div>
   </sc-if>
 
@@ -908,17 +914,47 @@ class Component extends DCLogic {
         : 'The piece is held for you for 48 hours. We\u0027ve sent a note to complete the acquisition.',
 
       isGallery: view === 'gallery',
-      lightboxOpen: !!this.state.lightbox,
-      lightboxSrc: (this.state.lightbox || {}).src,
-      lightboxAlt: (this.state.lightbox || {}).alt,
-      lightboxCaption: (this.state.lightbox || {}).cap,
-      openLightbox: (e) => {
-        const img = e.currentTarget;
-        const fig = img.closest('figure');
-        const cap = fig && fig.querySelector('figcaption') ? fig.querySelector('figcaption').innerText.replace(/\s+/g, ' ').trim() : '';
-        this.setState({ lightbox: { src: img.src, alt: img.alt, cap } });
-      },
-      closeLightbox: () => this.setState({ lightbox: null }),
+      ...(() => {
+        const lb = this.state.lightbox;
+        const cur = lb ? lb.items[lb.idx] : {};
+        const step = (d) => this.setState(s => {
+          if (!s.lightbox) return null;
+          const n = s.lightbox.items.length;
+          return { lightbox: { ...s.lightbox, idx: (s.lightbox.idx + d + n) % n } };
+        });
+        return {
+          lightboxOpen: !!lb,
+          lightboxSrc: cur.src,
+          lightboxAlt: cur.alt,
+          lightboxCaption: cur.cap,
+          lightboxCounter: lb ? (lb.idx + 1) + ' / ' + lb.items.length : '',
+          openLightbox: (e) => {
+            const img = e.currentTarget;
+            const fig = img.closest('figure');
+            const container = fig ? fig.parentElement : null;
+            const items = container
+              ? [...container.querySelectorAll('figure')].map(f => {
+                  const im = f.querySelector('img');
+                  const fc = f.querySelector('figcaption');
+                  return { src: im.src, alt: im.alt, cap: fc ? fc.innerText.replace(/\s+/g, ' ').trim() : '' };
+                })
+              : [{ src: img.src, alt: img.alt, cap: '' }];
+            const idx = Math.max(0, items.findIndex(it => it.src === img.src));
+            this.setState({ lightbox: { items, idx } });
+          },
+          nextLightbox: (e) => { e.stopPropagation(); step(1); },
+          prevLightbox: (e) => { e.stopPropagation(); step(-1); },
+          lbTouchStart: (e) => { this._lbX = e.touches[0].clientX; this._lbSwiped = false; },
+          lbTouchEnd: (e) => {
+            const dx = e.changedTouches[0].clientX - (this._lbX || 0);
+            if (Math.abs(dx) > 40) { this._lbSwiped = true; step(dx < 0 ? 1 : -1); }
+          },
+          closeLightbox: () => {
+            if (this._lbSwiped) { this._lbSwiped = false; return; }
+            this.setState({ lightbox: null });
+          },
+        };
+      })(),
       customerPhotos: this._galleryP1 = [
         { src: 'assets/hf_20260705_141922_49238d29-330c-46ca-8b66-c94ddc5a3abd.png', alt: 'Clear rostrato vase with garden roses on a marble mantelpiece in a Parisian apartment', credit: 'claire — paris.', piece: 'Onda Vase' },
         { src: 'assets/hf_20260705_141926_b85b1edb-55a0-49e1-9aed-53bda3abb237.png', alt: 'Clear rostrato vase on a concrete kitchen bench in a brutalist loft', credit: 'mara — berlin.', piece: 'Onda Vase' },
