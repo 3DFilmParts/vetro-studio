@@ -22,6 +22,17 @@
       if (this._inited) return;
       this._inited = true;
       this.style.display = 'block';
+      // Fill the mount even when the host doesn't give this element an
+      // explicit size (mobile browsers collapsed it to the canvas default).
+      if (!this.style.height) this.style.height = '100%';
+      if (!this.style.width) this.style.width = '100%';
+      if (this.parentElement) {
+        const pp = getComputedStyle(this.parentElement).position;
+        if (pp === 'absolute' || pp === 'relative') {
+          this.style.position = 'absolute';
+          this.style.inset = '0';
+        }
+      }
       this._init().catch((e) => console.error('glass-viewer:', e));
     }
 

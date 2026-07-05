@@ -38,6 +38,9 @@
   .vs-heropanel > div > span { padding: 12px 20px !important; }
   span[style*="right: 48px"][style*="bottom: 40px"] { right: 16px !important; bottom: 12px !important; }
   section[style*="min-height: 78vh"] img { object-position: 72% 50% !important; }
+  .vs-heropanel { background: rgba(59,10,20,0.55) !important; }
+  section[style*="height: 82vh"] { height: calc(100svh - 150px) !important; }
+  section[style*="height: 82vh"] > div[style*="left: 48px"] { left: 16px !important; right: 16px !important; bottom: 16px !important; padding: 16px 18px !important; }
 }
 </style></helmet>
 
@@ -96,7 +99,7 @@
 
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <div>
-  <section data-screen-label="Hero" style="position: relative; min-height: 78vh; display: flex; align-items: stretch;">
+  <section data-screen-label="Hero" onTouchStart="{{ heroTouchStart }}" onTouchEnd="{{ heroTouchEnd }}" style="position: relative; min-height: 78vh; display: flex; align-items: stretch;">
     <div style="position: absolute; inset: 0; overflow: hidden;">
       <sc-for list="{{ heroSlides }}" as="s" hint-placeholder-count="1">
         <img src="{{ s.src }}" alt="{{ s.alt }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: {{ s.opacity }}; transition: opacity 1400ms cubic-bezier(0.22,1,0.36,1);">
@@ -117,7 +120,7 @@
   <section data-screen-label="The film" style="background: #3B0A14; padding: 96px 48px;">
     <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px;">
       <div style="display: flex; justify-content: space-between; align-items: baseline;">
-        <h2 style="font: 500 32px/1.15 'Cormorant Garamond', serif; color: #FAF7F2; margin: 0;">Watch the light move.</h2>
+        <h2 style="font: 500 32px/1.15 'Cormorant Garamond', serif; color: #FAF7F2; margin: 0;">The Mira Vase, as evening arrives.</h2>
         <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">the dining room, 6pm.</span>
       </div>
       <div style="position: relative; cursor: pointer;" onClick="{{ toggleFilm }}">
@@ -1047,6 +1050,17 @@ class Component extends DCLogic {
 
       heroSlides: heroImages.map((img, i) => ({ ...img, opacity: i === heroIndex ? 1 : 0 })),
       heroCounter: String(heroIndex + 1).padStart(2, '0') + ' / 03',
+      heroTouchStart: (e) => { this._heroX = e.touches[0].clientX; },
+      heroTouchEnd: (e) => {
+        const dx = e.changedTouches[0].clientX - (this._heroX || 0);
+        if (Math.abs(dx) > 40) {
+          clearInterval(this._heroTimer);
+          this._heroTimer = setInterval(() => {
+            this.setState(s => ({ heroIndex: (s.heroIndex + 1) % 3 }));
+          }, 6000);
+          this.setState(s => ({ heroIndex: (s.heroIndex + (dx < 0 ? 1 : -1) + 3) % 3 }));
+        }
+      },
 
       catalogue,
 
