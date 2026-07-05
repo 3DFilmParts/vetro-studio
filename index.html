@@ -38,7 +38,15 @@
   .vs-heropanel > div > span { padding: 12px 20px !important; }
   span[style*="right: 48px"][style*="bottom: 40px"] { right: 16px !important; bottom: 12px !important; }
   section[style*="min-height: 78vh"] img { object-position: 72% 50% !important; }
-  .vs-heropanel { background: rgba(59,10,20,0.55) !important; }
+  .vs-heropanel { background: linear-gradient(to right, rgba(59,10,20,0.92) 0%, rgba(59,10,20,0.55) 70%, rgba(59,10,20,0.15) 100%) !important; }
+  .vs-heropanel p { display: none !important; }
+  .vs-heropanel span[style*="color: #B97F88"] { display: none !important; }
+  .vs-heroclose { display: block !important; }
+  .vs-heropanel { padding: 14px 16px !important; margin: 0 10px 14px !important; gap: 8px !important; }
+  .vs-heropanel h1 { font-size: 22px !important; }
+  .vs-heropanel > div { gap: 8px !important; }
+  .vs-heropanel > div > span { padding: 9px 14px !important; font-size: 10px !important; }
+  .vs-heroclose { top: 6px !important; right: 8px !important; font-size: 20px !important; }
   section[style*="height: 82vh"] { height: calc(100svh - 150px) !important; }
   section[style*="height: 82vh"] > div[style*="left: 48px"] { left: 16px !important; right: 16px !important; bottom: 16px !important; padding: 16px 18px !important; }
 }
@@ -59,7 +67,7 @@
           <div style="position: absolute; top: 100%; left: -24px; padding-top: 16px; z-index: 30;">
             <div style="background: #FAF7F2; border: 1px solid #E9E2D6; padding: 20px 26px; display: flex; flex-direction: column; gap: 13px; min-width: 210px; box-shadow: 0 16px 40px rgba(33,26,23,0.12);">
               <span onClick="{{ goHome }}" style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">All pieces</span>
-              <span onClick="{{ goRound }}" style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">In the round — 360°</span>
+              <span onClick="{{ goRound }}" style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">The Viewing Room</span>
               <span onClick="{{ goArchive }}" style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">Retired forms</span>
               <span onClick="{{ goSaved }}" style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">Saved pieces</span>
             </div>
@@ -106,15 +114,21 @@
       </sc-for>
     </div>
     <span style="position: absolute; right: 48px; bottom: 40px; font: 700 13px/1.2 'Courier Prime', monospace; color: #FAF7F2;">{{ heroCounter }}</span>
-    <div class="vs-heropanel" style="position: relative; align-self: flex-end; background: #3B0A14; color: #FAF7F2; margin: 0 0 64px 48px; padding: 44px 48px; max-width: 460px; display: flex; flex-direction: column; gap: 18px;">
-      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">hand blown · melbourne</span>
-      <h1 style="font: 500 clamp(40px, 4.4vw, 64px)/1.04 'Cormorant Garamond', serif; color: #FAF7F2; margin: 0;">Glass, blown once.</h1>
-      <p style="font: 300 17px/1.65 'Jost', sans-serif; color: #B97F88; margin: 0;">A small studio in Melbourne making singular clear-glass vases for the rest of the world.</p>
+    <sc-if value="{{ heroPanelClosed }}" hint-placeholder-val="{{ false }}">
+      <span onClick="{{ showHeroPanel }}" style="position: absolute; left: 16px; bottom: 16px; background: rgba(59,10,20,0.92); color: #FAF7F2; font: 700 13px/1.2 'Courier Prime', monospace; padding: 12px 18px; cursor: pointer;">glass, blown once. +</span>
+    </sc-if>
+    <sc-if value="{{ heroPanelVisible }}" hint-placeholder-val="{{ true }}">
+    <div class="vs-heropanel" style="position: relative; align-self: flex-end; background: linear-gradient(to right, rgba(59,10,20,0.94) 0%, rgba(59,10,20,0.72) 70%, rgba(59,10,20,0.3) 100%); color: #FAF7F2; margin: 0 0 64px 48px; padding: 44px 48px; max-width: 460px; display: flex; flex-direction: column; gap: 18px;">
+      <span class="vs-heroclose" onClick="{{ hideHeroPanel }}" style="position: absolute; top: 10px; right: 14px; display: block; font: 300 26px/1 'Cormorant Garamond', serif; color: #FAF7F2; cursor: pointer; padding: 4px;" style-hover="opacity: 0.7;">×</span>
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #E9C8CD; text-shadow: 0 1px 12px rgba(33,7,14,0.5);">hand blown · melbourne</span>
+      <h1 style="font: 500 clamp(40px, 4.4vw, 64px)/1.04 'Cormorant Garamond', serif; color: #FAF7F2; margin: 0; text-shadow: 0 2px 18px rgba(33,7,14,0.45);">Glass, blown once.</h1>
+      <p style="font: 400 17px/1.65 'Jost', sans-serif; color: #FAF7F2; margin: 0; text-shadow: 0 1px 14px rgba(33,7,14,0.55);">A small studio in Melbourne making singular clear-glass vases for the rest of the world.</p>
       <div style="display: flex; gap: 14px; margin-top: 6px;">
         <span onClick="{{ scrollToPieces }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; background: #FAF7F2; color: #3B0A14; padding: 16px 34px; cursor: pointer;" style-hover="background: #F4EFE7;">Shop the pieces</span>
         <span onClick="{{ goStudio }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; border: 1px solid #FAF7F2; color: #FAF7F2; padding: 16px 34px; cursor: pointer;" style-hover="background: rgba(250,247,242,0.08);">The studio</span>
       </div>
     </div>
+    </sc-if>
   </section>
 
   <section data-screen-label="The film" style="background: #3B0A14; padding: 96px 48px;">
@@ -371,14 +385,20 @@
   </sc-if>
 
   <sc-if value="{{ isRound }}" hint-placeholder-val="{{ false }}">
-  <div data-screen-label="In the round">
+  <div data-screen-label="The viewing room">
     <section style="position: relative; height: 82vh; overflow: hidden;">
-      <x-import component-from-global-scope="glass-viewer" from="./glass-viewer.js" src="assets/vesper.glb" env="assets/hf_20260705_151411_3cb3379f-dd45-44e1-ad2e-2d709a0299c9.png" flowers-src="assets/hf_20260705_152231_6d76f372-a624-4a6e-bce8-346105a3419b.png" flowers="{{ roundFlowersAttr }}" style="position: absolute; inset: 0;" hint-size="100%,100%"></x-import>
+      <x-import component-from-global-scope="glass-viewer" from="./glass-viewer.js" src="assets/vesper.glb" env="assets/hf_20260705_211745_82e7fb64-348b-4bfe-b18a-463e85692491.png" flowers-src="assets/hf_20260705_152231_6d76f372-a624-4a6e-bce8-346105a3419b.png" flowers="{{ roundFlowersAttr }}" style="position: absolute; inset: 0;" hint-size="100%,100%"></x-import>
+      <sc-if value="{{ roundPanelClosed }}" hint-placeholder-val="{{ false }}">
+        <span onClick="{{ showRoundPanel }}" style="position: absolute; left: 16px; bottom: 16px; background: rgba(59,10,20,0.92); color: #FAF7F2; font: 700 13px/1.2 'Courier Prime', monospace; padding: 12px 18px; cursor: pointer;">the viewing room. +</span>
+      </sc-if>
+      <sc-if value="{{ roundPanelVisible }}" hint-placeholder-val="{{ true }}">
       <div style="position: absolute; left: 48px; bottom: 40px; background: #3B0A14; color: #FAF7F2; padding: 22px 28px; display: flex; flex-direction: column; gap: 8px;">
-        <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">vesper vase — in the round.</span>
+        <span onClick="{{ hideRoundPanel }}" style="position: absolute; top: 6px; right: 10px; font: 300 22px/1 'Cormorant Garamond', serif; color: #FAF7F2; cursor: pointer; padding: 4px;" style-hover="opacity: 0.7;">×</span>
+        <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">vesper vase — the viewing room.</span>
         <span style="font: 300 15px/1.5 'Jost', sans-serif; color: #FAF7F2;">Drag to turn the piece. Scroll to come closer.</span>
         <span onClick="{{ toggleRoundFlowers }}" style="font: 700 13px/1.2 'Courier Prime', monospace; color: #FAF7F2; cursor: pointer; margin-top: 4px;" style-hover="opacity: 0.7;">{{ roundFlowersLabel }}</span>
       </div>
+      </sc-if>
     </section>
     <section style="max-width: 1280px; margin: 0 auto; padding: 48px; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 16px;">
       <p style="font: 300 15px/1.6 'Jost', sans-serif; color: #8B8177; margin: 0; max-width: 520px;">A digital study of the Vesper Vase, scanned from the piece itself and lit by the room around it. Turn it and the light turns with it.</p>
@@ -496,6 +516,7 @@
         <article style="border-top: 1px solid #E9E2D6; padding: 48px 0; display: flex; flex-direction: column; gap: 18px;">
           <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">{{ e.date }}</span>
           <h2 style="font: 500 30px/1.2 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">{{ e.title }}</h2>
+          <img src="{{ e.image }}" alt="{{ e.imageAlt }}" style="width: 100%; max-width: 640px; aspect-ratio: 16 / 10; object-fit: cover; display: block; border: 1px solid #E9E2D6; box-sizing: border-box;">
           <p style="font: 300 17px/1.75 'Jost', sans-serif; color: #211A17; margin: 0; max-width: 640px;">{{ e.body1 }}</p>
           <p style="font: 300 17px/1.75 'Jost', sans-serif; color: #211A17; margin: 0; max-width: 640px;">{{ e.body2 }}</p>
         </article>
@@ -672,6 +693,7 @@ class Component extends DCLogic {
     giftNote: '',
     savedIds: [],
     lightbox: null,
+    heroPanelOpen: true,
     commName: '',
     commEmail: '',
     commBrief: '',
@@ -875,18 +897,24 @@ class Component extends DCLogic {
         {
           date: '28 june 2026',
           title: 'Why the register exists',
+          image: 'assets/hf_20260705_141922_49238d29-330c-46ca-8b66-c94ddc5a3abd.png',
+          imageAlt: 'A retired form living on a marble mantelpiece in Paris',
           body1: 'People ask why we publish where every retired form lives. The answer is simple: scarcity is easy to claim and hard to prove. The register is the proof — a form appears there the day it sells, and it never comes back.',
           body2: 'It has had one strange effect. Owners write to us when they move house, asking us to update the city. The vases now have forwarding addresses.',
         },
         {
           date: '9 may 2026',
           title: 'Clear is a decision, not an absence',
+          image: 'assets/hf_20260705_135452_c5374205-49af-4b3b-938f-9a648f344c27.png',
+          imageAlt: 'Six o\u0027clock light passing through a clear vase in the west window',
           body1: 'Colour hides. A tint will cover an uneven wall, a hurried point, a bubble that arrived uninvited. Clear glass shows everything, which is why most studios avoid it and why we work in nothing else.',
           body2: 'When a piece comes off the rod, we stand it in the west window and wait for six o\u0027clock. If the light passes through and comes out better than it went in, the piece stays.',
         },
         {
           date: '14 march 2026',
           title: 'Several hundred points, one at a time',
+          image: 'assets/hf_20260705_142645_f9bf2f4a-9436-4f6c-aaf7-90e74d910dc9.png',
+          imageAlt: 'Steel pincers pulling a rostrato point from glowing glass',
           body1: 'The rostrato technique does not forgive. Each point is pinched while the glass is between 600 and 700 degrees — too hot and it slumps back, too cool and it cracks. A full vase is forty minutes of exactly this.',
           body2: 'We are often asked whether a machine could do it faster. It could, and every point would be identical, and that is precisely the problem.',
         },
@@ -1020,6 +1048,10 @@ class Component extends DCLogic {
       goRound: () => this.goTo('round'),
       roundFlowersAttr: String(!!this.state.roundFlowers),
       roundFlowersLabel: this.state.roundFlowers ? 'flowers — remove ×' : 'flowers — add +',
+      roundPanelVisible: this.state.roundPanelOpen !== false,
+      roundPanelClosed: this.state.roundPanelOpen === false,
+      hideRoundPanel: () => this.setState({ roundPanelOpen: false }),
+      showRoundPanel: () => this.setState({ roundPanelOpen: true }),
       toggleRoundFlowers: () => this.setState(st => ({ roundFlowers: !st.roundFlowers })),
       openVesper: () => this.openProduct(2),
       navItems: [
@@ -1050,6 +1082,10 @@ class Component extends DCLogic {
 
       heroSlides: heroImages.map((img, i) => ({ ...img, opacity: i === heroIndex ? 1 : 0 })),
       heroCounter: String(heroIndex + 1).padStart(2, '0') + ' / 03',
+      heroPanelVisible: this.state.heroPanelOpen,
+      heroPanelClosed: !this.state.heroPanelOpen,
+      hideHeroPanel: () => this.setState({ heroPanelOpen: false }),
+      showHeroPanel: () => this.setState({ heroPanelOpen: true }),
       heroTouchStart: (e) => { this._heroX = e.touches[0].clientX; },
       heroTouchEnd: (e) => {
         const dx = e.changedTouches[0].clientX - (this._heroX || 0);

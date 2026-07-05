@@ -53,8 +53,8 @@
 
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 100);
-      camera.position.set(0, 0.32, 4.4);
-      camera.lookAt(0, -0.08, 0);
+      camera.position.set(0, 0.1, 4.4);
+      camera.lookAt(0, -0.15, 0);
 
       // Load the location photo once; sharp copy feeds reflections, a blurred
       // copy becomes the backdrop plane the glass refracts.
@@ -76,7 +76,7 @@
       c.width = img.naturalWidth;
       c.height = img.naturalHeight;
       const ctx = c.getContext('2d');
-      ctx.filter = 'blur(4.5px)';
+      ctx.filter = 'blur(1.5px)';
       ctx.drawImage(img, 0, 0);
       const blurTex = new THREE.CanvasTexture(c);
       blurTex.colorSpace = THREE.SRGBColorSpace;
@@ -99,13 +99,13 @@
         backdrop.scale.set(pw * 1.15, ph * 1.15, 1);
       };
 
-      const key = new THREE.DirectionalLight(0xfff0da, 1.1);
-      key.position.set(3, 4, 2.5);
+      const key = new THREE.DirectionalLight(0xfff0da, 0.9);
+      key.position.set(-2.5, 3.5, 3);
       scene.add(key);
-      // Cinematic backlight: warm rim from behind the piece, toward the camera.
-      const rim = new THREE.DirectionalLight(0xffd9a0, 3.2);
-      rim.position.set(-0.4, 2.2, -3.5);
-      rim.target.position.set(0, -0.2, 1);
+      // Cinematic sidelight: warm sun from the window on the right.
+      const rim = new THREE.DirectionalLight(0xffd9a0, 3.0);
+      rim.position.set(3.6, 1.6, -1.2);
+      rim.target.position.set(0, -0.3, 0.4);
       scene.add(rim, rim.target);
       scene.add(new THREE.AmbientLight(0xffe9cf, 0.18));
 
@@ -279,7 +279,7 @@
       resize();
 
       renderer.setAnimationLoop(() => {
-        if (idle && !dragging) pivot.rotation.y += 0.0035;
+        if (idle && !dragging) pivot.rotation.y += 0.00175;
         renderer.render(scene, camera);
       });
     }
