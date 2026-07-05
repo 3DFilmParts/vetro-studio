@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script><script src="./ds-base.js"></script><style>
+@media (min-width: 821px) and (max-width: 1080px) {
+  header { column-gap: 16px !important; padding: 18px 24px !important; }
+  header nav { gap: 18px !important; }
+  header > div:last-child { gap: 14px !important; margin-left: 12px !important; }
+}
+@media (max-width: 820px) {
+  header { display: flex !important; flex-wrap: wrap !important; align-items: center !important; gap: 12px 22px !important; padding: 14px 20px !important; }
+  header nav { order: 3; width: 100%; gap: 18px !important; flex-wrap: wrap; }
+  header > div:last-child { margin-left: auto !important; gap: 16px !important; }
+  div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  section[style*="grid-template-columns"] { grid-template-columns: 1fr !important; gap: 40px !important; }
+  div[style*="columns: 3"] { columns: 1 !important; }
+  div[style*="position: sticky"] { position: static !important; }
+  section[style*="padding: 96px 48px"], div[style*="padding: 96px 48px"] { padding: 56px 20px !important; }
+  section[style*="padding: 120px 48px"] { padding: 72px 20px !important; }
+  div[style*="padding: 72px 64px"] { padding: 40px 22px !important; }
+  div[style*="padding: 48px"] { padding-left: 22px !important; padding-right: 22px !important; }
+  section[style*="min-height: 78vh"] > div[style*="background: #3B0A14"] { margin: 0 16px 24px !important; padding: 28px 24px !important; }
+  footer { padding: 48px 20px 24px !important; }
+  div[style*="gap: 64px"] { gap: 36px !important; }
+  span[style*="right: 48px; bottom: 40px"] { right: 20px !important; bottom: 16px !important; }
+  div[style*="left: 48px; bottom: 40px"] { left: 16px !important; bottom: 16px !important; right: 16px; padding: 16px 18px !important; }
+}
+</style></helmet>
+
+<div style="background: #FAF7F2; min-height: 100vh; font-family: 'Jost', sans-serif; color: #211A17;">
+
+  <sc-if value="{{ showAnnouncement }}" hint-placeholder-val="{{ true }}">
+    <div style="background: #3B0A14; color: #FAF7F2; font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; text-align: center; padding: 10px 16px;">Free worldwide shipping over $400 AUD — ships from Melbourne</div>
+  </sc-if>
+
+  <header style="display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: 24px; padding: 22px 40px; background: #FAF7F2; border-bottom: 1px solid #E9E2D6; position: sticky; top: 0; z-index: 20;">
+    <span onClick="{{ goHome }}" style="font: 700 18px/1 'Courier Prime', monospace; color: #3B0A14; justify-self: start; cursor: pointer; white-space: nowrap;">vetro studio.</span>
+    <nav style="display: flex; gap: 30px; align-items: center;">
+      <div style="position: relative;" onMouseEnter="{{ openShopMenu }}" onMouseLeave="{{ closeShopMenu }}">
+        <span onClick="{{ goHome }}" style="{{ shopNavStyle }}" style-hover="opacity: 0.6;">Shop</span>
+        <sc-if value="{{ shopMenuOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position: absolute; top: 100%; left: -24px; padding-top: 16px; z-index: 30;">
+            <div style="background: #FAF7F2; border: 1px solid #E9E2D6; padding: 20px 26px; display: flex; flex-direction: column; gap: 13px; min-width: 210px; box-shadow: 0 16px 40px rgba(33,26,23,0.12);">
+              <span onClick="{{ goHome }}" style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">All pieces</span>
+              <span onClick="{{ goRound }}" style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">In the round — 360°</span>
+              <span onClick="{{ goArchive }}" style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">Retired forms</span>
+              <span onClick="{{ goSaved }}" style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">Saved pieces</span>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="3">
+        <span onClick="{{ item.go }}" style="{{ item.style }}" style-hover="opacity: 0.6;">{{ item.label }}</span>
+      </sc-for>
+    </nav>
+    <div style="display: flex; gap: 24px; justify-self: end; margin-left: 32px;">
+      <span onClick="{{ toggleSearch }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">{{ searchLabel }}</span>
+      <span onClick="{{ goSaved }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">{{ savedLabel }}</span>
+      <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #211A17; cursor: pointer; white-space: nowrap;" style-hover="opacity: 0.6;">Cart (0)</span>
+    </div>
+  </header>
+
+  <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+    <section data-screen-label="Search" style="background: #FFFFFF; border-bottom: 1px solid #E9E2D6;">
+      <div style="max-width: 720px; margin: 0 auto; padding: 48px;">
+        <x-import component-from-global-scope="VetroStudioDesignSystem_316be8.Input" label="Search the pieces" placeholder="Try 'rostrato' or 'clear'" value="{{ searchQuery }}" on-change="{{ setQuery }}" hint-size="100%,72px"></x-import>
+        <div style="display: flex; flex-direction: column; margin-top: 24px;">
+          <sc-for list="{{ searchResults }}" as="r" hint-placeholder-count="0">
+            <div onClick="{{ r.open }}" style="display: flex; justify-content: space-between; align-items: baseline; padding: 14px 2px; border-bottom: 1px solid #E9E2D6; cursor: pointer;" style-hover="opacity: 0.7;">
+              <span style="font: 500 20px/1.2 'Cormorant Garamond', serif; color: #3B0A14;">{{ r.name }}</span>
+              <span style="font: 300 14px/1.4 'Jost', sans-serif; color: #8B8177;">{{ r.descriptor }}</span>
+              <span style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17;">{{ r.price }}</span>
+            </div>
+          </sc-for>
+          <sc-if value="{{ searchEmpty }}" hint-placeholder-val="{{ false }}">
+            <p style="font: 300 15px/1.6 'Jost', sans-serif; color: #8B8177; margin: 16px 0 0;">Nothing by that name. Five pieces exist — try 'vase'.</p>
+          </sc-if>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div>
+  <section data-screen-label="Hero" style="position: relative; min-height: 78vh; display: flex; align-items: stretch;">
+    <div style="position: absolute; inset: 0; overflow: hidden;">
+      <sc-for list="{{ heroSlides }}" as="s" hint-placeholder-count="1">
+        <img src="{{ s.src }}" alt="{{ s.alt }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: {{ s.opacity }}; transition: opacity 1400ms cubic-bezier(0.22,1,0.36,1);">
+      </sc-for>
+    </div>
+    <span style="position: absolute; right: 48px; bottom: 40px; font: 700 13px/1.2 'Courier Prime', monospace; color: #FAF7F2;">{{ heroCounter }}</span>
+    <div style="position: relative; align-self: flex-end; background: #3B0A14; color: #FAF7F2; margin: 0 0 64px 48px; padding: 44px 48px; max-width: 460px; display: flex; flex-direction: column; gap: 18px;">
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">hand blown · melbourne</span>
+      <h1 style="font: 500 clamp(40px, 4.4vw, 64px)/1.04 'Cormorant Garamond', serif; color: #FAF7F2; margin: 0;">Glass, blown once.</h1>
+      <p style="font: 300 17px/1.65 'Jost', sans-serif; color: #B97F88; margin: 0;">A small studio in Melbourne making singular clear-glass vases for the rest of the world.</p>
+      <div style="display: flex; gap: 14px; margin-top: 6px;">
+        <span onClick="{{ scrollToPieces }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; background: #FAF7F2; color: #3B0A14; padding: 16px 34px; cursor: pointer;" style-hover="background: #F4EFE7;">Shop the pieces</span>
+        <span onClick="{{ goStudio }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; border: 1px solid #FAF7F2; color: #FAF7F2; padding: 16px 34px; cursor: pointer;" style-hover="background: rgba(250,247,242,0.08);">The studio</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="The film" style="background: #3B0A14; padding: 96px 48px;">
+    <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <h2 style="font: 500 32px/1.15 'Cormorant Garamond', serif; color: #FAF7F2; margin: 0;">Watch the light move.</h2>
+        <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">the dining room, 6pm.</span>
+      </div>
+      <div style="position: relative; cursor: pointer;" onClick="{{ toggleFilm }}">
+        <video ref="{{ filmRef }}" src="assets/hf_20260705_140750_fdc982c3-6341-4dd5-a6bc-b8a844df1ce2.mp4" muted="{{ true }}" loop="{{ true }}" autoPlay="{{ true }}" playsInline="{{ true }}" style="width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: #2A070E;"></video>
+        <sc-if value="{{ filmPaused }}" hint-placeholder-val="{{ false }}">
+          <span style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #FAF7F2;"><span style="background: #3B0A14; padding: 16px 34px;">Play →</span></span>
+        </sc-if>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div onClick="{{ seekFilm }}" style="position: relative; height: 16px; display: flex; align-items: center; cursor: pointer;">
+          <div style="position: absolute; left: 0; right: 0; height: 1px; background: #6B1F30;"></div>
+          <div style="{{ filmFillStyle }}"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span onClick="{{ toggleFilm }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #FAF7F2; cursor: pointer;" style-hover="opacity: 0.7;">{{ filmButtonLabel }}</span>
+          <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">{{ filmTimeLabel }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Catalogue" ref="{{ piecesRef }}" style="max-width: 1280px; margin: 0 auto; padding: 96px 48px;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 48px;">
+      <h2 style="font: 500 32px/1.15 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">The pieces</h2>
+      <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">Five vases · one of each</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; row-gap: 48px;">
+      <sc-for list="{{ catalogue }}" as="p" hint-placeholder-count="5">
+        <x-import component-from-global-scope="VetroStudioDesignSystem_316be8.ProductCard" name="{{ p.name }}" descriptor="{{ p.descriptor }}" price="{{ p.price }}" colourway="{{ p.colourway }}" badge="{{ p.badge }}" image="{{ p.image }}" on-click="{{ p.open }}" hint-size="100%,480px"></x-import>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="Every angle" style="border-top: 1px solid #E9E2D6; background: #FFFFFF;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 96px 48px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 64px; align-items: center;">
+      <img src="{{ galleryMainSrc }}" alt="{{ galleryMainAlt }}" style="aspect-ratio: 1 / 1; width: 100%; object-fit: cover; display: block;">
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <h2 style="font: 500 32px/1.15 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Every angle earns its keep.</h2>
+        <p style="font: 300 18px/1.65 'Jost', sans-serif; color: #211A17; margin: 0;">Each point is pulled by hand while the glass is still moving. Turn the piece and the light turns with it.</p>
+        <div style="display: flex; gap: 16px; margin-top: 8px;">
+          <sc-for list="{{ galleryThumbs }}" as="t" hint-placeholder-count="3">
+            <img src="{{ t.src }}" alt="{{ t.alt }}" onClick="{{ t.select }}" style="{{ t.style }}" style-hover="opacity: 0.8;">
+          </sc-for>
+        </div>
+        <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">{{ galleryCaption }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="In the home" style="border-top: 1px solid #E9E2D6;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 96px 48px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 48px;">
+        <h2 style="font: 500 32px/1.15 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">In the home</h2>
+        <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">Clear glass · warm light</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <figure style="margin: 0; display: flex; flex-direction: column; gap: 14px;">
+          <img src="assets/hf_20260705_134928_8e88e145-74c3-4801-a220-26b1d8cbd070.png" alt="Clear vase with magnolia branches on an oak dining table" style="aspect-ratio: 3 / 4; width: 100%; object-fit: cover; display: block;">
+          <figcaption style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">the dining room.</figcaption>
+        </figure>
+        <figure style="margin: 0; display: flex; flex-direction: column; gap: 14px;">
+          <img src="assets/hf_20260705_134939_bdc7eac6-2f1e-497b-b6ce-4430cd609b11.png" alt="Clear vase catching golden-hour light on a stone ledge" style="aspect-ratio: 3 / 4; width: 100%; object-fit: cover; display: block;">
+          <figcaption style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">the window ledge.</figcaption>
+        </figure>
+        <figure style="margin: 0; display: flex; flex-direction: column; gap: 14px;">
+          <img src="uploads/6_a38c4867-505d-4156-92c4-2556964522ed.webp" alt="Clear rostrato vase with pink hydrangeas on a marble console" style="aspect-ratio: 3 / 4; width: 100%; object-fit: cover; display: block;">
+          <figcaption style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">the hallway.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Studio band" style="border-top: 1px solid #E9E2D6; background: #F4EFE7;">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 96px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;">
+      <img src="assets/hf_20260705_134849_5f2fd4f1-63e4-435d-9910-edd164fa5cf2.png" alt="Clear rostrato vase on a dark marble console beside art books" style="aspect-ratio: 4 / 3; width: 100%; object-fit: cover; display: block; border: 1px solid #E9E2D6; box-sizing: border-box;">
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <h2 style="font: 500 32px/1.15 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Each piece is made once.</h2>
+        <p style="font: 300 18px/1.65 'Jost', sans-serif; color: #211A17; margin: 0;">We blow a run of one. When a vase sells, its form is retired. What you hold was never repeated, and never will be.</p>
+        <span onClick="{{ goStudio }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14; border-bottom: 1px solid #3B0A14; align-self: flex-start; padding-bottom: 4px; cursor: pointer;" style-hover="opacity: 0.7;">Visit the studio →</span>
+      </div>
+    </div>
+  </section>
+
+  <sc-if value="{{ showStatement }}" hint-placeholder-val="{{ true }}">
+    <section data-screen-label="Statement" style="background: #3B0A14; padding: 120px 48px; text-align: center;">
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88; letter-spacing: 0.02em;">clear glass only</span>
+      <p style="font: 500 clamp(32px, 3.6vw, 52px)/1.2 'Cormorant Garamond', serif; color: #FAF7F2; margin: 20px auto 0; max-width: 760px;">Formed by hand. No two alike. Nothing added — not even colour.</p>
+    </section>
+  </sc-if>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Product page">
+    <section style="max-width: 1280px; margin: 0 auto; padding: 48px 48px 96px;">
+      <span onClick="{{ goHome }}" style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177; cursor: pointer;" style-hover="opacity: 0.7;">← the pieces</span>
+      <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px; margin-top: 40px; align-items: start;">
+        <div style="display: flex; flex-direction: column; gap: 16px; position: sticky; top: 90px;">
+          <img src="{{ prodMainSrc }}" alt="{{ prodMainAlt }}" style="{{ prodMainStyle }}">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; gap: 12px;">
+              <sc-for list="{{ prodThumbs }}" as="t" hint-placeholder-count="3">
+                <img src="{{ t.src }}" alt="{{ t.alt }}" onClick="{{ t.select }}" style="{{ t.style }}" style-hover="opacity: 0.8;">
+              </sc-for>
+            </div>
+            <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">{{ prodImageCaption }}</span>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 22px;">
+          <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">{{ prodSku }}</span>
+          <h1 style="font: 500 clamp(36px, 3.6vw, 54px)/1.08 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">{{ prodName }}</h1>
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font: 300 16px/1.5 'Jost', sans-serif; color: #8B8177;">{{ prodDescriptor }}</span>
+            <span style="font: 400 20px/1.4 'Jost', sans-serif; color: #211A17;">{{ prodPrice }}</span>
+          </div>
+          <p style="font: 300 17px/1.7 'Jost', sans-serif; color: #211A17; margin: 0;">{{ prodDescription }}</p>
+          <p style="font: 300 16px/1.7 'Jost', sans-serif; color: #211A17; margin: 0;">{{ prodDescription2 }}</p>
+          <span style="font: 700 14px/1.4 'Courier Prime', monospace; color: #8B8177;">{{ prodDims }}</span>
+          <sc-if value="{{ prodNotAcquired }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 6px;">
+              <span onClick="{{ acquire }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; background: #3B0A14; color: #FAF7F2; padding: 18px 40px; text-align: center; cursor: pointer;" style-hover="background: #521523;">{{ prodAcquireLabel }}</span>
+              <span onClick="{{ goContact }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14; border-bottom: 1px solid #3B0A14; align-self: center; padding-bottom: 4px; cursor: pointer;" style-hover="opacity: 0.7;">Enquire about this piece</span>
+              <span onClick="{{ toggleGift }}" style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177; align-self: center; cursor: pointer;" style-hover="opacity: 0.7;">{{ giftLabel }}</span>
+              <sc-if value="{{ giftMode }}" hint-placeholder-val="{{ false }}">
+                <div style="border: 1px solid #E9E2D6; background: #FFFFFF; padding: 24px; display: flex; flex-direction: column; gap: 12px;">
+                  <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #211A17;">Your card, handwritten</span>
+                  <textarea rows="3" placeholder="A few words. We write them out in ink." value="{{ giftNote }}" onChange="{{ setGiftNote }}" style="font: 300 15px/1.6 'Jost', sans-serif; color: #211A17; background: #FFFFFF; padding: 12px 13px; border: 1px solid #E9E2D6; border-radius: 2px; outline: none; resize: vertical;"></textarea>
+                  <span style="font: 300 13px/1.5 'Jost', sans-serif; color: #8B8177;">Wrapped in ivory paper, tied without ribbon. No price enclosed.</span>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ prodAcquired }}" hint-placeholder-val="{{ false }}">
+            <div style="border: 1px solid #E9E2D6; background: #FFFFFF; padding: 28px 32px; display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+              <span style="font: 500 20px/1.3 'Cormorant Garamond', serif; color: #3B0A14;">Reserved.</span>
+              <p style="font: 300 15px/1.6 'Jost', sans-serif; color: #211A17; margin: 0;">{{ acquiredMessage }}</p>
+              <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">one of one · now yours to lose.</span>
+            </div>
+          </sc-if>
+          <x-import component-from-global-scope="VetroStudioDesignSystem_316be8.Accordion" items="{{ prodAccordion }}" style="{{ accordionStyle }}" hint-size="100%,180px"></x-import>
+          <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px;">
+            <span onClick="{{ goCertificate }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14; border-bottom: 1px solid #3B0A14; padding-bottom: 4px; cursor: pointer;" style-hover="opacity: 0.7;">Certificate of authenticity</span>
+            <span onClick="{{ toggleWishlist }}" style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177; cursor: pointer;" style-hover="opacity: 0.7;">{{ wishlistLabel }}</span>
+          </div>
+          <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">blown once. retired after sale.</span>
+        </div>
+      </div>
+    </section>
+    <section style="border-top: 1px solid #E9E2D6; background: #F4EFE7;">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 72px 48px 96px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 40px;">
+          <h2 style="font: 500 28px/1.15 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Also in the studio</h2>
+          <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">Four remain</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+          <sc-for list="{{ prodOthers }}" as="o" hint-placeholder-count="4">
+            <x-import component-from-global-scope="VetroStudioDesignSystem_316be8.ProductCard" name="{{ o.name }}" descriptor="{{ o.descriptor }}" price="{{ o.price }}" colourway="{{ o.colourway }}" image="{{ o.image }}" on-click="{{ o.open }}" hint-size="100%,380px"></x-import>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isStudio }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Studio page">
+    <section style="max-width: 1280px; margin: 0 auto; padding: 96px 48px 64px;">
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">the studio.</span>
+      <h1 style="font: 500 clamp(40px, 4.4vw, 64px)/1.08 'Cormorant Garamond', serif; color: #3B0A14; margin: 18px 0 0; max-width: 640px;">One furnace. Two hands. No repeats.</h1>
+      <p style="font: 300 18px/1.65 'Jost', sans-serif; color: #211A17; margin: 28px 0 0; max-width: 520px;">The studio sits in a converted warehouse in Melbourne's inner north. Glass is gathered at dawn, worked while it moves, and left alone once it stops.</p>
+    </section>
+    <section data-screen-label="Our process" style="max-width: 1280px; margin: 0 auto; padding: 0 48px 96px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 48px;">
+        <h2 style="font: 500 32px/1.15 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Our process</h2>
+        <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">Behind the furnace door</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <figure style="margin: 0; display: flex; flex-direction: column; gap: 18px;">
+          <img src="assets/hf_20260705_142642_6b423c4c-50b6-429c-9e19-664954910643.png" alt="Glassmaker gathering molten clear glass from the furnace on a blowpipe" style="aspect-ratio: 3 / 4; width: 100%; object-fit: cover; display: block;">
+          <figcaption>
+            <div style="display: flex; gap: 16px; align-items: baseline;">
+              <span style="font: 700 14px/1.2 'Courier Prime', monospace; color: #8B8177;">01</span>
+              <h3 style="font: 500 24px/1.2 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Gather</h3>
+            </div>
+            <p style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; margin: 10px 0 0;">Clear crystal only, gathered at 1,120 degrees. No oxides, no tints — the batch is the same colour as the finished piece: none.</p>
+          </figcaption>
+        </figure>
+        <figure style="margin: 0; display: flex; flex-direction: column; gap: 18px;">
+          <img src="assets/hf_20260705_142645_f9bf2f4a-9436-4f6c-aaf7-90e74d910dc9.png" alt="Hands pinching a rostrato point from glowing glass with steel pincers" style="aspect-ratio: 3 / 4; width: 100%; object-fit: cover; display: block;">
+          <figcaption>
+            <div style="display: flex; gap: 16px; align-items: baseline;">
+              <span style="font: 700 14px/1.2 'Courier Prime', monospace; color: #8B8177;">02</span>
+              <h3 style="font: 500 24px/1.2 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Pull</h3>
+            </div>
+            <p style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; margin: 10px 0 0;">Each rostrato point is pinched and pulled by hand while the glass is still moving. A vase carries several hundred.</p>
+          </figcaption>
+        </figure>
+        <figure style="margin: 0; display: flex; flex-direction: column; gap: 18px;">
+          <img src="assets/hf_20260705_142647_cb9f5e47-e326-4c28-900d-488f28870c96.png" alt="Finished clear rostrato vase on the workbench beside the annealing kiln" style="aspect-ratio: 3 / 4; width: 100%; object-fit: cover; display: block;">
+          <figcaption>
+            <div style="display: flex; gap: 16px; align-items: baseline;">
+              <span style="font: 700 14px/1.2 'Courier Prime', monospace; color: #8B8177;">03</span>
+              <h3 style="font: 500 24px/1.2 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Retire</h3>
+            </div>
+            <p style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; margin: 10px 0 0;">The piece cools overnight in the kiln, is signed, and its form is retired. One of each — the next begins as something else.</p>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+    <section style="background: #3B0A14; padding: 96px 48px; text-align: center;">
+      <p style="font: 500 clamp(28px, 3vw, 44px)/1.25 'Cormorant Garamond', serif; color: #FAF7F2; margin: 0 auto; max-width: 680px;">The furnace runs at 1,120 degrees. The studio runs on quiet.</p>
+      <div style="display: flex; gap: 14px; justify-content: center; margin-top: 32px;">
+        <span onClick="{{ goContact }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; background: #FAF7F2; color: #3B0A14; padding: 16px 34px; cursor: pointer;" style-hover="background: #F4EFE7;">Arrange a visit</span>
+        <span onClick="{{ goCommissions }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; border: 1px solid #FAF7F2; color: #FAF7F2; padding: 16px 34px; cursor: pointer;" style-hover="background: rgba(250,247,242,0.08);">Commission a piece</span>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isGallery }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Customer gallery">
+    <section style="max-width: 1280px; margin: 0 auto; padding: 96px 48px;">
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">customer gallery.</span>
+      <h1 style="font: 500 clamp(40px, 4.4vw, 64px)/1.08 'Cormorant Garamond', serif; color: #3B0A14; margin: 18px 0 0; max-width: 640px;">In your homes.</h1>
+      <p style="font: 300 18px/1.65 'Jost', sans-serif; color: #211A17; margin: 28px 0 0; max-width: 480px;">The same clear glass, photographed by the people who live with it. Paris to Byron Bay — it takes the room's colour, because it has none of its own.</p>
+      <div style="columns: 3; column-gap: 24px; margin-top: 64px;">
+        <sc-for list="{{ customerPhotosShown }}" as="c" hint-placeholder-count="6">
+          <figure style="margin: 0 0 24px; break-inside: avoid; display: flex; flex-direction: column; gap: 12px;">
+            <img src="{{ c.src }}" alt="{{ c.alt }}" style="width: 100%; display: block; border: 1px solid #E9E2D6; box-sizing: border-box;">
+            <figcaption style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px;">
+              <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #3B0A14;">{{ c.credit }}</span>
+              <span style="font: 300 13px/1.4 'Jost', sans-serif; color: #8B8177;">{{ c.piece }}</span>
+            </figcaption>
+          </figure>
+        </sc-for>
+      </div>
+      <div style="display: flex; justify-content: center; align-items: baseline; gap: 28px; margin-top: 48px;">
+        <span onClick="{{ galleryPrev }}" style="{{ galleryPrevStyle }}" style-hover="opacity: 0.6;">← previous</span>
+        <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #3B0A14;">{{ galleryPageLabel }}</span>
+        <span onClick="{{ galleryNext }}" style="{{ galleryNextStyle }}" style-hover="opacity: 0.6;">next →</span>
+      </div>
+      <div style="border-top: 1px solid #E9E2D6; margin-top: 48px; padding-top: 40px; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 16px;">
+        <span style="font: 500 20px/1.3 'Cormorant Garamond', serif; color: #3B0A14;">Photographed one at home?</span>
+        <span onClick="{{ goContact }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14; border-bottom: 1px solid #3B0A14; padding-bottom: 4px; cursor: pointer;" style-hover="opacity: 0.7;">Send it to the studio</span>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isRound }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="In the round">
+    <section style="position: relative; height: 82vh; overflow: hidden;">
+      <x-import component-from-global-scope="glass-viewer" from="./glass-viewer.js" src="assets/vesper.glb" env="assets/hf_20260705_151411_3cb3379f-dd45-44e1-ad2e-2d709a0299c9.png" flowers-src="assets/hf_20260705_152231_6d76f372-a624-4a6e-bce8-346105a3419b.png" flowers="{{ roundFlowersAttr }}" style="position: absolute; inset: 0;" hint-size="100%,100%"></x-import>
+      <div style="position: absolute; left: 48px; bottom: 40px; background: #3B0A14; color: #FAF7F2; padding: 22px 28px; display: flex; flex-direction: column; gap: 8px;">
+        <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">vesper vase — in the round.</span>
+        <span style="font: 300 15px/1.5 'Jost', sans-serif; color: #FAF7F2;">Drag to turn the piece. Scroll to come closer.</span>
+        <span onClick="{{ toggleRoundFlowers }}" style="font: 700 13px/1.2 'Courier Prime', monospace; color: #FAF7F2; cursor: pointer; margin-top: 4px;" style-hover="opacity: 0.7;">{{ roundFlowersLabel }}</span>
+      </div>
+    </section>
+    <section style="max-width: 1280px; margin: 0 auto; padding: 48px; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 16px;">
+      <p style="font: 300 15px/1.6 'Jost', sans-serif; color: #8B8177; margin: 0; max-width: 520px;">A digital study of the Vesper Vase, scanned from the piece itself and lit by the room around it. Turn it and the light turns with it.</p>
+      <span onClick="{{ openVesper }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14; border-bottom: 1px solid #3B0A14; padding-bottom: 4px; cursor: pointer;" style-hover="opacity: 0.7;">View the piece</span>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isCertificate }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Certificate">
+    <section style="max-width: 720px; margin: 0 auto; padding: 96px 48px;">
+      <span onClick="{{ goProductBack }}" style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177; cursor: pointer;" style-hover="opacity: 0.7;">← {{ prodName }}</span>
+      <div style="border: 1px solid #3B0A14; padding: 8px; margin-top: 40px;">
+        <div style="border: 1px solid #E9E2D6; background: #FFFFFF; padding: 72px 64px; display: flex; flex-direction: column; align-items: center; gap: 28px; text-align: center;">
+          <span style="font: 700 18px/1 'Courier Prime', monospace; color: #3B0A14;">vetro studio.</span>
+          <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">Certificate of authenticity</span>
+          <h1 style="font: 500 44px/1.1 'Cormorant Garamond', serif; color: #3B0A14; margin: 8px 0 0;">{{ prodName }}</h1>
+          <div style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #E9E2D6; border-bottom: 1px solid #E9E2D6; padding: 28px 0; width: 100%;">
+            <span style="font: 700 14px/1.6 'Courier Prime', monospace; color: #211A17;">{{ prodSku }}</span>
+            <span style="font: 700 14px/1.6 'Courier Prime', monospace; color: #211A17;">{{ prodDims }}</span>
+            <span style="font: 700 14px/1.6 'Courier Prime', monospace; color: #211A17;">blown {{ certDate }}</span>
+            <span style="font: 700 14px/1.6 'Courier Prime', monospace; color: #211A17;">colour — none</span>
+            <span style="font: 700 14px/1.6 'Courier Prime', monospace; color: #8B8177;">certificate {{ certNo }}</span>
+          </div>
+          <p style="font: 300 15px/1.7 'Jost', sans-serif; color: #211A17; margin: 0; max-width: 420px;">This piece was gathered, blown and finished by hand in one sitting at the Melbourne studio. Its form is registered and will not be repeated.</p>
+          <div style="display: flex; flex-direction: column; gap: 6px; align-items: center; margin-top: 8px;">
+            <span style="font: 500 italic 30px/1 'Cormorant Garamond', serif; color: #3B0A14;">vetro studio</span>
+            <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">maker's signature</span>
+          </div>
+        </div>
+      </div>
+      <p style="font: 300 14px/1.6 'Jost', sans-serif; color: #8B8177; margin: 24px 0 0; text-align: center;">A printed and signed copy travels with every piece.</p>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isArchive }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Retired forms">
+    <section style="max-width: 880px; margin: 0 auto; padding: 96px 48px;">
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">the register.</span>
+      <h1 style="font: 500 clamp(36px, 3.8vw, 56px)/1.1 'Cormorant Garamond', serif; color: #3B0A14; margin: 18px 0 0;">Retired forms.</h1>
+      <p style="font: 300 18px/1.65 'Jost', sans-serif; color: #211A17; margin: 28px 0 0; max-width: 480px;">Every form we have ever blown, and where it went. Once sold, a form is never made again — this page is the proof.</p>
+      <div style="margin-top: 56px;">
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 16px; padding: 0 2px 14px; border-bottom: 1px solid #3B0A14;">
+          <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">Form</span>
+          <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">Blown</span>
+          <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">Retired</span>
+          <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #8B8177;">Lives in</span>
+        </div>
+        <sc-for list="{{ retiredForms }}" as="f" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 16px; padding: 18px 2px; border-bottom: 1px solid #E9E2D6; align-items: baseline;">
+            <span style="font: 500 20px/1.2 'Cormorant Garamond', serif; color: #3B0A14;">{{ f.name }}</span>
+            <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #211A17;">{{ f.blown }}</span>
+            <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #211A17;">{{ f.retired }}</span>
+            <span style="font: 300 15px/1.4 'Jost', sans-serif; color: #8B8177;">{{ f.home }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <p style="font: 700 13px/1.6 'Courier Prime', monospace; color: #8B8177; margin: 40px 0 0;">five forms remain. then these too will rest.</p>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isCommissions }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Commissions">
+    <section style="max-width: 1280px; margin: 0 auto; padding: 96px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 96px;">
+      <div style="display: flex; flex-direction: column; gap: 28px;">
+        <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">commissions.</span>
+        <h1 style="font: 500 clamp(36px, 3.8vw, 56px)/1.1 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">A form of your own.</h1>
+        <p style="font: 300 18px/1.65 'Jost', sans-serif; color: #211A17; margin: 0; max-width: 420px;">We accept a small number of commissions each year — for a home, a hotel, a table that needs one thing it cannot find. The process is slow and shared.</p>
+        <div style="display: flex; flex-direction: column; gap: 24px; margin-top: 12px;">
+          <div style="display: flex; gap: 20px; align-items: baseline;">
+            <span style="font: 700 14px/1.2 'Courier Prime', monospace; color: #8B8177;">01</span>
+            <p style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; margin: 0;">Write to us. Tell us the room, the light, and what the piece should hold.</p>
+          </div>
+          <div style="display: flex; gap: 20px; align-items: baseline;">
+            <span style="font: 700 14px/1.2 'Courier Prime', monospace; color: #8B8177;">02</span>
+            <p style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; margin: 0;">We answer with a sketch and a date. One form, drawn for you, never repeated.</p>
+          </div>
+          <div style="display: flex; gap: 20px; align-items: baseline;">
+            <span style="font: 700 14px/1.2 'Courier Prime', monospace; color: #8B8177;">03</span>
+            <p style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; margin: 0;">The piece is blown in one sitting, signed, certified, and brought to your door.</p>
+          </div>
+        </div>
+        <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">from $1,200 aud · eight weeks · one of one.</span>
+      </div>
+      <sc-if value="{{ commSent }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E9E2D6; padding: 64px 48px; display: flex; flex-direction: column; gap: 16px; align-self: start;">
+          <h2 style="font: 500 28px/1.2 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Noted.</h2>
+          <p style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; margin: 0;">Your brief is with the maker. If the form wants to exist, you'll hear from us within the week.</p>
+          <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">made slowly in melbourne.</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ commNotSent }}" hint-placeholder-val="{{ true }}">
+        <div style="background: #FFFFFF; border: 1px solid #E9E2D6; padding: 48px; display: flex; flex-direction: column; gap: 22px; align-self: start;">
+          <x-import component-from-global-scope="VetroStudioDesignSystem_316be8.Input" label="Name" placeholder="Your name" value="{{ commName }}" on-change="{{ setCommName }}" hint-size="100%,72px"></x-import>
+          <x-import component-from-global-scope="VetroStudioDesignSystem_316be8.Input" label="Email" type="email" placeholder="you@example.com" value="{{ commEmail }}" on-change="{{ setCommEmail }}" hint-size="100%,72px"></x-import>
+          <label style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #211A17;">The brief</span>
+            <textarea rows="5" placeholder="The room, the light, what it should hold." value="{{ commBrief }}" onChange="{{ setCommBrief }}" style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; background: #FFFFFF; padding: 13px 14px; border: 1px solid #E9E2D6; border-radius: 2px; outline: none; resize: vertical;"></textarea>
+          </label>
+          <span onClick="{{ sendCommission }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; background: #3B0A14; color: #FAF7F2; padding: 16px 34px; cursor: pointer; align-self: flex-start;" style-hover="background: #521523;">Begin the conversation</span>
+        </div>
+      </sc-if>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isJournal }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Journal">
+    <section style="max-width: 880px; margin: 0 auto; padding: 96px 48px;">
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">journal.</span>
+      <h1 style="font: 500 clamp(36px, 3.8vw, 56px)/1.1 'Cormorant Garamond', serif; color: #3B0A14; margin: 18px 0 56px;">Notes from the studio.</h1>
+      <sc-for list="{{ journalEntries }}" as="e" hint-placeholder-count="3">
+        <article style="border-top: 1px solid #E9E2D6; padding: 48px 0; display: flex; flex-direction: column; gap: 18px;">
+          <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">{{ e.date }}</span>
+          <h2 style="font: 500 30px/1.2 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">{{ e.title }}</h2>
+          <p style="font: 300 17px/1.75 'Jost', sans-serif; color: #211A17; margin: 0; max-width: 640px;">{{ e.body1 }}</p>
+          <p style="font: 300 17px/1.75 'Jost', sans-serif; color: #211A17; margin: 0; max-width: 640px;">{{ e.body2 }}</p>
+        </article>
+      </sc-for>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isSaved }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Saved pieces">
+    <section style="max-width: 720px; margin: 0 auto; padding: 96px 48px;">
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">kept aside.</span>
+      <h1 style="font: 500 clamp(36px, 3.8vw, 56px)/1.1 'Cormorant Garamond', serif; color: #3B0A14; margin: 18px 0 40px;">Saved pieces.</h1>
+      <sc-if value="{{ savedEmpty }}" hint-placeholder-val="{{ true }}">
+        <p style="font: 300 17px/1.7 'Jost', sans-serif; color: #8B8177; margin: 0;">Nothing kept yet. On any piece, choose "keep for later." — it will wait here. Though remember: each is one of one, and they don't wait forever.</p>
+      </sc-if>
+      <div style="display: flex; flex-direction: column;">
+        <sc-for list="{{ savedItems }}" as="s" hint-placeholder-count="0">
+          <div onClick="{{ s.open }}" style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 16px 2px; border-bottom: 1px solid #E9E2D6; cursor: pointer;" style-hover="opacity: 0.7;">
+            <span style="font: 500 22px/1.2 'Cormorant Garamond', serif; color: #3B0A14;">{{ s.name }}</span>
+            <span style="font: 300 14px/1.4 'Jost', sans-serif; color: #8B8177;">{{ s.descriptor }}</span>
+            <span style="font: 400 15px/1.4 'Jost', sans-serif; color: #211A17;">{{ s.price }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isCare }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Care page">
+    <section style="max-width: 880px; margin: 0 auto; padding: 96px 48px;">
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">client care.</span>
+      <h1 style="font: 500 clamp(36px, 3.8vw, 56px)/1.1 'Cormorant Garamond', serif; color: #3B0A14; margin: 18px 0 0;">Care &amp; shipping.</h1>
+      <div style="display: flex; flex-direction: column; gap: 0; margin-top: 56px;">
+        <div style="border-top: 1px solid #E9E2D6; padding: 40px 0; display: grid; grid-template-columns: 200px 1fr; gap: 40px;">
+          <span style="font: 500 12px/1.6 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14;">Care of the glass</span>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <p style="font: 300 16px/1.7 'Jost', sans-serif; color: #211A17; margin: 0;">Hand wash only, in lukewarm water with a soft cloth. Never a dishwasher, never abrasives. Dry upside down on linen.</p>
+            <p style="font: 300 16px/1.7 'Jost', sans-serif; color: #211A17; margin: 0;">Keep clear of direct heat and of other glass — the rostrato points are sharper than they look, to you and to each other.</p>
+            <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">glass remembers. treat it gently.</span>
+          </div>
+        </div>
+        <div style="border-top: 1px solid #E9E2D6; padding: 40px 0; display: grid; grid-template-columns: 200px 1fr; gap: 40px;">
+          <span style="font: 500 12px/1.6 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14;">Shipping</span>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <p style="font: 300 16px/1.7 'Jost', sans-serif; color: #211A17; margin: 0;">Every piece is packed by the maker in moulded stone-wool and double-walled board, then shipped worldwide, fully insured, within 5 business days of your order.</p>
+            <p style="font: 300 16px/1.7 'Jost', sans-serif; color: #211A17; margin: 0;">Shipping is free over $400 AUD. Australia arrives in 2–4 days; the rest of the world in 5–10. You'll receive tracking the moment it leaves the studio.</p>
+          </div>
+        </div>
+        <div style="border-top: 1px solid #E9E2D6; padding: 40px 0; display: grid; grid-template-columns: 200px 1fr; gap: 40px;">
+          <span style="font: 500 12px/1.6 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14;">Returns</span>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <p style="font: 300 16px/1.7 'Jost', sans-serif; color: #211A17; margin: 0;">Fourteen days, no questions. A one-of-one piece returned in original condition goes quietly back into the catalogue — its form is only retired once it stays sold.</p>
+            <p style="font: 300 16px/1.7 'Jost', sans-serif; color: #211A17; margin: 0;">If a piece arrives broken, we refund in full. We can't remake it — there is no mould — but we will make you first in line for what comes next.</p>
+          </div>
+        </div>
+        <div style="border-top: 1px solid #E9E2D6; border-bottom: 1px solid #E9E2D6; padding: 40px 0; display: grid; grid-template-columns: 200px 1fr; gap: 40px;">
+          <span style="font: 500 12px/1.6 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14;">Gift cards</span>
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            <p style="font: 300 16px/1.7 'Jost', sans-serif; color: #211A17; margin: 0;">Issued on paper, posted in an envelope, for any amount. They don't expire — the right piece may not exist yet.</p>
+            <span onClick="{{ goContact }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #3B0A14; border-bottom: 1px solid #3B0A14; align-self: flex-start; padding-bottom: 4px; cursor: pointer;" style-hover="opacity: 0.7;">Write to us for one</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Contact page">
+    <section style="max-width: 1280px; margin: 0 auto; padding: 96px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 96px;">
+      <div style="display: flex; flex-direction: column; gap: 28px;">
+        <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #8B8177;">contact.</span>
+        <h1 style="font: 500 clamp(36px, 3.8vw, 56px)/1.1 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Write to the studio.</h1>
+        <p style="font: 300 18px/1.65 'Jost', sans-serif; color: #211A17; margin: 0; max-width: 400px;">Commissions, visits, and questions about a piece. We reply within two days.</p>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 12px;">
+          <span style="font: 700 14px/1.6 'Courier Prime', monospace; color: #3B0A14;">hello@vetrostudio.com.au</span>
+          <span style="font: 300 15px/1.6 'Jost', sans-serif; color: #8B8177;">14 Rokeby Street, Collingwood VIC 3066</span>
+          <span style="font: 300 15px/1.6 'Jost', sans-serif; color: #8B8177;">By appointment · Thursday to Saturday</span>
+        </div>
+      </div>
+      <sc-if value="{{ contactSent }}" hint-placeholder-val="{{ false }}">
+        <div style="background: #FFFFFF; border: 1px solid #E9E2D6; padding: 64px 48px; display: flex; flex-direction: column; gap: 16px; align-self: start;">
+          <h2 style="font: 500 28px/1.2 'Cormorant Garamond', serif; color: #3B0A14; margin: 0;">Received.</h2>
+          <p style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; margin: 0;">Your note is with the studio. We reply within two days.</p>
+          <span style="font: 700 13px/1.4 'Courier Prime', monospace; color: #8B8177;">made slowly in melbourne.</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ contactNotSent }}" hint-placeholder-val="{{ true }}">
+        <div style="background: #FFFFFF; border: 1px solid #E9E2D6; padding: 48px; display: flex; flex-direction: column; gap: 22px; align-self: start;">
+          <x-import component-from-global-scope="VetroStudioDesignSystem_316be8.Input" label="Name" placeholder="Your name" value="{{ contactName }}" on-change="{{ setContactName }}" hint-size="100%,72px"></x-import>
+          <x-import component-from-global-scope="VetroStudioDesignSystem_316be8.Input" label="Email" type="email" placeholder="you@example.com" value="{{ contactEmail }}" on-change="{{ setContactEmail }}" hint-size="100%,72px"></x-import>
+          <label style="display: flex; flex-direction: column; gap: 8px;">
+            <span style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #211A17;">Message</span>
+            <textarea rows="5" placeholder="What are you after?" value="{{ contactMessage }}" onChange="{{ setContactMessage }}" style="font: 300 16px/1.6 'Jost', sans-serif; color: #211A17; background: #FFFFFF; padding: 13px 14px; border: 1px solid #E9E2D6; border-radius: 2px; outline: none; resize: vertical;"></textarea>
+          </label>
+          <span onClick="{{ sendContact }}" style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; background: #3B0A14; color: #FAF7F2; padding: 16px 34px; cursor: pointer; align-self: flex-start;" style-hover="background: #521523;">Send</span>
+        </div>
+      </sc-if>
+    </section>
+  </div>
+  </sc-if>
+
+  <footer data-screen-label="Footer" style="background: #3B0A14; color: #FAF7F2; padding: 64px 48px 32px; border-top: 1px solid #521523;">
+    <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 48px; max-width: 1280px; margin: 0 auto;">
+      <div>
+        <p style="font: 700 20px/1.2 'Courier Prime', monospace; margin: 0 0 16px;">vetro studio.</p>
+        <p style="font: 400 13px/1.5 'Jost', sans-serif; color: #B97F88; margin: 0 0 20px; max-width: 300px;">Be the first to hear when a new piece leaves the studio.</p>
+        <div style="display: flex;">
+          <span style="flex: 1; max-width: 240px; color: #B97F88; border: 1px solid #6B1F30; border-right: none; padding: 12px 14px; font: 400 15px/1.6 'Jost', sans-serif;">Email address</span>
+          <span style="background: #FAF7F2; color: #3B0A14; font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; padding: 0 20px; display: flex; align-items: center; cursor: pointer;">Join</span>
+        </div>
+      </div>
+      <div>
+        <p style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #B97F88; margin: 0 0 16px;">Shop</p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span onClick="{{ goHome }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">All vases</span>
+          <span onClick="{{ goHome }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">New in</span>
+          <span onClick="{{ goArchive }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">Retired forms</span>
+          <span onClick="{{ goSaved }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">Saved pieces</span>
+          <span onClick="{{ goCare }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">Gift cards</span>
+        </div>
+      </div>
+      <div>
+        <p style="font: 500 12px/1.2 'Jost', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: #B97F88; margin: 0 0 16px;">Studio</p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <span onClick="{{ goStudio }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">About</span>
+          <span onClick="{{ goJournal }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">Journal</span>
+          <span onClick="{{ goCommissions }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">Commissions</span>
+          <span onClick="{{ goCare }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">Care</span>
+          <span onClick="{{ goCare }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">Shipping</span>
+          <span onClick="{{ goContact }}" style="font: 400 15px/1.6 'Jost', sans-serif; cursor: pointer;" style-hover="opacity: 0.7;">Contact</span>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1280px; margin: 56px auto 0; padding-top: 24px; border-top: 1px solid #521523; display: flex; justify-content: space-between; align-items: baseline;">
+      <span style="font: 700 13px/1.2 'Courier Prime', monospace; color: #B97F88;">made slowly in melbourne.</span>
+      <span style="font: 400 13px/1.5 'Jost', sans-serif; color: #B97F88;">© 2026 vetro studio</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAnnouncement&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Layout&quot;}, &quot;showStatement&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Layout&quot;}}">
+class Component extends DCLogic {
+  state = {
+    heroIndex: 0,
+    view: 'home',
+    searchOpen: false,
+    searchQuery: '',
+    galleryIndex: 0,
+    contactName: '',
+    contactEmail: '',
+    contactMessage: '',
+    contactSent: false,
+    productIndex: 0,
+    productImageIndex: 0,
+    acquired: false,
+    giftMode: false,
+    giftNote: '',
+    savedIds: [],
+    commName: '',
+    commEmail: '',
+    commBrief: '',
+    commSent: false,
+    galleryPage: 1,
+    shopMenuOpen: false,
+    filmPaused: false,
+    filmPct: 0,
+    filmTimeLabel: '00:00 / 00:10',
+  };
+
+  _onFilmLoaded() {
+    const v = this._filmEl;
+    if (!v) return;
+    const saved = parseFloat(localStorage.getItem('vetro-film-pos') || '0');
+    if (saved > 0 && saved < v.duration) v.currentTime = saved;
+  }
+
+  _onFilmTime() {
+    const v = this._filmEl;
+    if (!v || !v.duration) return;
+    localStorage.setItem('vetro-film-pos', String(v.currentTime));
+    this.setState({
+      filmPct: (v.currentTime / v.duration) * 100,
+      filmTimeLabel: this._fmt(v.currentTime) + ' / ' + this._fmt(v.duration),
+    });
+  }
+
+  _fmt(t) {
+    const s = Math.floor(t || 0);
+    return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+  }
+
+  componentDidMount() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('vetro-saved') || '[]');
+      if (Array.isArray(saved)) this.setState({ savedIds: saved });
+    } catch (e) { /* fresh start */ }
+    this._heroTimer = setInterval(() => {
+      this.setState(s => ({ heroIndex: (s.heroIndex + 1) % 3 }));
+    }, 6000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._heroTimer);
+  }
+
+  openProduct(i) {
+    this.setState({ view: 'product', productIndex: i, productImageIndex: 0, acquired: false, giftMode: false, giftNote: '', searchOpen: false });
+    const sc = document.scrollingElement || document.documentElement;
+    sc.scrollTop = 0;
+  }
+
+  goTo(view) {
+    this.setState({ view, searchOpen: false });
+    const sc = document.scrollingElement || document.documentElement;
+    sc.scrollTop = 0;
+  }
+
+  renderVals() {
+    const heroImages = [
+      { src: 'assets/hf_20260705_135429_24efef93-d4bf-46bd-9529-479bb8ed6e06.png', alt: 'Clear rostrato vase on a travertine coffee table in a luxury living room' },
+      { src: 'assets/hf_20260705_135441_29787b4f-b5ab-464d-8416-3210b312eb96.png', alt: 'Clear rostrato vase with magnolia branches on an oak dining table' },
+      { src: 'assets/hf_20260705_135452_c5374205-49af-4b3b-938f-9a648f344c27.png', alt: 'Clear rostrato vase catching golden-hour light in a cliffside home' },
+    ];
+
+    const catalogue = [
+      {
+        name: 'Onda Vase', descriptor: 'rostrato, clear glass', price: '$429 AUD', colourway: 'clear', badge: 'Limited run of one',
+        image: 'assets/hf_20260705_140313_b9a70bea-76de-4a60-bde5-c7b52cf59cc0.png',
+        sku: 'onda — 01 / 01', dims: 'H 32cm · Ø 14cm', certDate: '11 march 2026', certNo: 'VS-26-014',
+        description: 'Rippled clear glass. Each ripple is pulled by hand while the glass is still moving, so the pattern records the exact minute it was made. Nothing is added — not even colour.',
+        description2: 'Hold it to a window and the ripples work as a lens: the room behind bends, then settles. The wall runs 6mm at the base and is drawn to 3mm at the lip — a taper only handwork produces. No mould was used. None exists.',
+        gallery: [
+          { src: 'assets/hf_20260705_135717_ec462561-915c-4120-a2b9-3b965d086c0b.png', alt: 'Macro detail of hand-pulled rostrato points', caption: 'the detail.' },
+          { src: 'assets/hf_20260705_140313_b9a70bea-76de-4a60-bde5-c7b52cf59cc0.png', alt: 'Onda Vase on a travertine plinth', caption: 'in the studio.' },
+          { src: 'assets/hf_20260705_135429_24efef93-d4bf-46bd-9529-479bb8ed6e06.png', alt: 'Onda Vase on a travertine coffee table in a luxury living room', caption: 'in the room.', pos: '72% 50%' },
+          { src: 'assets/hf_20260705_142222_d6f44bb9-bce8-4148-aad0-742e1f6172d9.png', alt: 'Onda Vase with tulips in a New York brownstone bay window', caption: 'at home.' },
+        ],
+      },
+      {
+        name: 'Alba Vase', descriptor: 'clear, flared lip', price: '$389 AUD', colourway: 'clear', badge: null,
+        image: 'assets/hf_20260705_140316_f3a24fb0-9796-4062-9513-3f01f9a4c82a.png',
+        sku: 'alba — 01 / 01', dims: 'H 24cm · Ø 15cm', certDate: '2 april 2026', certNo: 'VS-26-015',
+        description: 'A footed form with a flared lip, opened in the final seconds while the glass could still listen. The smallest piece in the studio, and the quickest to sell.',
+        description2: 'The foot is a single gather, pressed once and released. Because the lip is opened last, its curve belongs to that afternoon\u0027s temperature — a few degrees either way and it would sit differently. The conditions cannot be repeated, so neither can the piece.',
+        gallery: [
+          { src: 'assets/hf_20260705_143733_57f53e0b-dcd0-47cb-9a5d-3bad147c2ba7.png', alt: 'Macro detail of the Alba Vase flared lip and pulled points', caption: 'the detail.' },
+          { src: 'assets/hf_20260705_140316_f3a24fb0-9796-4062-9513-3f01f9a4c82a.png', alt: 'Alba Vase on a travertine plinth', caption: 'in the studio.' },
+          { src: 'assets/hf_20260705_143740_360c09b4-a6b5-40e2-ac8f-9120bb15553c.png', alt: 'Alba Vase small in frame on a tall plinth in a minimalist gallery room', caption: 'in the room.' },
+          { src: 'assets/hf_20260705_141942_da24ab67-dafb-4935-b3b2-a89bff0aa2e8.png', alt: 'Alba Vase with an orchid stem beside a freestanding stone bath', caption: 'at home.' },
+        ],
+      },
+      {
+        name: 'Vesper Vase', descriptor: 'rostrato, tall column', price: '$459 AUD', colourway: 'clear', badge: null,
+        image: 'assets/hf_20260705_140318_c5ffb654-62d0-4e09-a093-d659ff2fc13a.png',
+        sku: 'vesper — 01 / 01', dims: 'H 38cm · Ø 18cm', certDate: '19 april 2026', certNo: 'VS-26-016',
+        description: 'The tall column. Several hundred points pinched row by row, each one catching the evening at a different angle. Made for a room with west light.',
+        description2: 'At 38 centimetres this is the most demanding form in the studio: the column must stay true while every point is pulled, and each reheat threatens the line. It took two failed attempts before this one held. They were returned to the furnace; this is the one that survived.',
+        gallery: [
+          { src: 'assets/hf_20260705_143741_87facc82-c030-4baf-b13c-786837e42ee1.png', alt: 'Macro detail across the Vesper Vase pulled glass points', caption: 'the detail.' },
+          { src: 'assets/hf_20260705_140318_c5ffb654-62d0-4e09-a093-d659ff2fc13a.png', alt: 'Vesper Vase on a travertine plinth', caption: 'in the studio.' },
+          { src: 'assets/hf_20260705_135721_c6d5b264-3282-415d-9139-52bfdf5032bb.png', alt: 'Vesper Vase in side profile on a limestone plinth', caption: 'in the room.' },
+          { src: 'assets/hf_20260705_141924_a17ba5fc-66ff-434d-b27b-ef232a45f9f0.png', alt: 'Vesper Vase with eucalyptus on a bedside table in a japandi bedroom', caption: 'at home.' },
+        ],
+      },
+      {
+        name: 'Mira Vase', descriptor: 'rostrato, open mouth', price: '$349 AUD', colourway: 'clear', badge: null,
+        image: 'assets/hf_20260705_140328_8b23f701-50c6-45cf-bb1f-0e530928959b.png',
+        sku: 'mira — 01 / 01', dims: 'H 26cm · Ø 20cm', certDate: '7 may 2026', certNo: 'VS-26-017',
+        description: 'A wide, open mouth made to hold a full armful of stems. The belly is left slightly soft, the way it settled the day it was blown.',
+        description2: 'The mouth is opened to its full 20 centimetres in the last minute of work, while the rim can still be persuaded. The softness in the belly is deliberate — the glass was allowed to settle under its own weight, and where it came to rest is where it stays.',
+        gallery: [
+          { src: 'assets/hf_20260705_143742_5990b786-cf8a-4d87-813c-6f4e4262246b.png', alt: 'Macro detail over the open rim of the Mira Vase', caption: 'the detail.' },
+          { src: 'assets/hf_20260705_140328_8b23f701-50c6-45cf-bb1f-0e530928959b.png', alt: 'Mira Vase on a travertine plinth', caption: 'in the studio.' },
+          { src: 'assets/hf_20260705_135441_29787b4f-b5ab-464d-8416-3210b312eb96.png', alt: 'Mira Vase with magnolia branches on an oak dining table', caption: 'in the room.', pos: '68% 50%' },
+          { src: 'uploads/6_a38c4867-505d-4156-92c4-2556964522ed.webp', alt: 'Mira Vase with pink hydrangeas on a marble console', caption: 'at home.' },
+        ],
+      },
+      {
+        name: 'Sella Vase', descriptor: 'gold rostrato', price: '$589 AUD', colourway: 'gold', badge: 'Limited run of one',
+        image: 'assets/hf_20260705_140331_196e8fc7-714e-492b-a717-bee4e7f8fd34.png',
+        sku: 'sella — 01 / 01', dims: 'H 30cm · Ø 22cm', certDate: '30 may 2026', certNo: 'VS-26-018',
+        description: 'The one exception to clear: a thread of 24k gold leaf gathered into the crystal before the first breath. It reads as clear glass until the light drops low.',
+        description2: 'The leaf lives inside the wall, not on it — it cannot flake, rub, or fade. In daylight the piece is nearly colourless; at candle height it turns. One thread, one firing, one piece, and the largest of the five.',
+        gallery: [
+          { src: 'assets/hf_20260705_143755_53bbbd4e-09f2-4822-be83-03d7c5e4bba3.png', alt: 'Macro detail of gold leaf trapped in the Sella Vase points', caption: 'the detail.' },
+          { src: 'assets/hf_20260705_140331_196e8fc7-714e-492b-a717-bee4e7f8fd34.png', alt: 'Sella Vase on a travertine plinth', caption: 'in the studio.' },
+          { src: 'assets/hf_20260705_143757_1013ffac-acb5-4b62-87fb-7c6e1b3f884d.png', alt: 'Sella Vase on a dark timber sideboard in a moody luxury study', caption: 'in the room.' },
+          { src: 'assets/hf_20260705_143800_c09777b5-e0fb-4364-acf0-df8993318b53.png', alt: 'Sella Vase with burgundy dahlias on a marble console in an entryway', caption: 'at home.' },
+        ],
+      },
+    ].map((p, i) => ({ ...p, open: () => this.openProduct(i) }));
+
+    const galleryAngles = [
+      { src: 'assets/hf_20260705_135721_c6d5b264-3282-415d-9139-52bfdf5032bb.png', alt: 'Clear rostrato vase in side profile on a limestone plinth', caption: 'in profile.' },
+      { src: 'assets/hf_20260705_135717_ec462561-915c-4120-a2b9-3b965d086c0b.png', alt: 'Macro detail of hand-pulled rostrato glass points', caption: 'the rostrato point.' },
+      { src: 'assets/hf_20260705_135719_3c158d7b-4623-47b0-a861-b18c409d2213.png', alt: 'Clear rostrato vase seen from directly above', caption: 'from above.' },
+    ];
+
+    const { view, heroIndex, searchOpen, searchQuery, galleryIndex } = this.state;
+
+    const navStyle = (active) => ({
+      font: "500 12px/1.2 'Jost', sans-serif",
+      letterSpacing: '0.18em',
+      textTransform: 'uppercase',
+      color: '#211A17',
+      padding: '4px 2px',
+      cursor: 'pointer',
+      borderBottom: active ? '1px solid #3B0A14' : '1px solid transparent',
+    });
+
+    const q = searchQuery.trim().toLowerCase();
+    const searchResults = q.length === 0 ? [] : catalogue
+      .filter(p => (p.name + ' ' + p.descriptor + ' vase').toLowerCase().includes(q));
+
+    return {
+      showAnnouncement: this.props.showAnnouncement ?? true,
+      showStatement: this.props.showStatement ?? true,
+
+      isHome: view === 'home',
+      isStudio: view === 'studio',
+      isContact: view === 'contact',
+      isProduct: view === 'product',
+      isCare: view === 'care',
+      goCare: () => this.goTo('care'),
+      isCertificate: view === 'certificate',
+      goCertificate: () => this.goTo('certificate'),
+      goProductBack: () => this.setState({ view: 'product' }),
+      certDate: (catalogue[this.state.productIndex] || catalogue[0]).certDate,
+      certNo: (catalogue[this.state.productIndex] || catalogue[0]).certNo,
+
+      isArchive: view === 'archive',
+      goArchive: () => this.goTo('archive'),
+      retiredForms: [
+        { name: 'Bruma Vase', blown: '02.2024', retired: '05.2024', home: 'a hallway in Copenhagen' },
+        { name: 'Lira Vase', blown: '04.2024', retired: '06.2024', home: 'a kitchen in San Sebastián' },
+        { name: 'Corda Vase', blown: '07.2024', retired: '11.2024', home: 'a study in Kyoto' },
+        { name: 'Notte Vase', blown: '10.2024', retired: '01.2025', home: 'a bedroom in Los Angeles' },
+        { name: 'Piuma Vase', blown: '01.2025', retired: '02.2025', home: 'a windowsill in Cornwall' },
+        { name: 'Ansa Vase', blown: '03.2025', retired: '08.2025', home: 'a dining room in Beirut' },
+        { name: 'Velo Vase', blown: '06.2025', retired: '09.2025', home: 'an entryway in Buenos Aires' },
+        { name: 'Sasso Vase', blown: '09.2025', retired: '12.2025', home: 'a library in Edinburgh' },
+      ],
+
+      isCommissions: view === 'commissions',
+      goCommissions: () => this.goTo('commissions'),
+      commName: this.state.commName,
+      commEmail: this.state.commEmail,
+      commBrief: this.state.commBrief,
+      setCommName: (v) => this.setState({ commName: v }),
+      setCommEmail: (v) => this.setState({ commEmail: v }),
+      setCommBrief: (e) => this.setState({ commBrief: e && e.target ? e.target.value : e }),
+      commSent: this.state.commSent,
+      commNotSent: !this.state.commSent,
+      sendCommission: () => this.setState({ commSent: true }),
+
+      isJournal: view === 'journal',
+      goJournal: () => this.goTo('journal'),
+      journalEntries: [
+        {
+          date: '28 june 2026',
+          title: 'Why the register exists',
+          body1: 'People ask why we publish where every retired form lives. The answer is simple: scarcity is easy to claim and hard to prove. The register is the proof — a form appears there the day it sells, and it never comes back.',
+          body2: 'It has had one strange effect. Owners write to us when they move house, asking us to update the city. The vases now have forwarding addresses.',
+        },
+        {
+          date: '9 may 2026',
+          title: 'Clear is a decision, not an absence',
+          body1: 'Colour hides. A tint will cover an uneven wall, a hurried point, a bubble that arrived uninvited. Clear glass shows everything, which is why most studios avoid it and why we work in nothing else.',
+          body2: 'When a piece comes off the rod, we stand it in the west window and wait for six o\u0027clock. If the light passes through and comes out better than it went in, the piece stays.',
+        },
+        {
+          date: '14 march 2026',
+          title: 'Several hundred points, one at a time',
+          body1: 'The rostrato technique does not forgive. Each point is pinched while the glass is between 600 and 700 degrees — too hot and it slumps back, too cool and it cracks. A full vase is forty minutes of exactly this.',
+          body2: 'We are often asked whether a machine could do it faster. It could, and every point would be identical, and that is precisely the problem.',
+        },
+      ],
+
+      isSaved: view === 'saved',
+      goSaved: () => this.goTo('saved'),
+      savedLabel: 'Saved (' + this.state.savedIds.length + ')',
+      savedEmpty: this.state.savedIds.length === 0,
+      savedItems: this.state.savedIds.map(i => catalogue[i]).filter(Boolean),
+      wishlistLabel: this.state.savedIds.includes(this.state.productIndex) ? 'saved — remove.' : 'keep for later.',
+      toggleWishlist: () => {
+        const i = this.state.productIndex;
+        const ids = this.state.savedIds.includes(i)
+          ? this.state.savedIds.filter(x => x !== i)
+          : [...this.state.savedIds, i];
+        localStorage.setItem('vetro-saved', JSON.stringify(ids));
+        this.setState({ savedIds: ids });
+      },
+
+      giftMode: this.state.giftMode,
+      giftLabel: this.state.giftMode ? 'not a gift after all \u00d7' : 'make it a gift +',
+      giftNote: this.state.giftNote,
+      setGiftNote: (e) => this.setState({ giftNote: e && e.target ? e.target.value : e }),
+      toggleGift: () => this.setState(s => ({ giftMode: !s.giftMode })),
+      acquiredMessage: this.state.giftMode
+        ? 'The piece is held for you for 48 hours. It will be wrapped in ivory paper, your card handwritten in the studio, no price enclosed.'
+        : 'The piece is held for you for 48 hours. We\u0027ve sent a note to complete the acquisition.',
+
+      isGallery: view === 'gallery',
+      customerPhotos: this._galleryP1 = [
+        { src: 'assets/hf_20260705_141922_49238d29-330c-46ca-8b66-c94ddc5a3abd.png', alt: 'Clear rostrato vase with garden roses on a marble mantelpiece in a Parisian apartment', credit: 'claire — paris.', piece: 'Onda Vase' },
+        { src: 'assets/hf_20260705_141926_b85b1edb-55a0-49e1-9aed-53bda3abb237.png', alt: 'Clear rostrato vase on a concrete kitchen bench in a brutalist loft', credit: 'mara — berlin.', piece: 'Onda Vase' },
+        { src: 'assets/hf_20260705_141924_a17ba5fc-66ff-434d-b27b-ef232a45f9f0.png', alt: 'Clear rostrato vase with eucalyptus on a black oak bedside table in a japandi bedroom', credit: 'kenji — tokyo.', piece: 'Vesper Vase' },
+        { src: 'uploads/6_a38c4867-505d-4156-92c4-2556964522ed.webp', alt: 'Clear rostrato vase with pink hydrangeas on a marble console', credit: 'georgia — melbourne.', piece: 'Mira Vase' },
+        { src: 'assets/hf_20260705_142544_179287bf-32f6-42bc-9633-d239e7e8cbff.png', alt: 'Clear rostrato vase with pink blossom branches on a walnut console in an Istanbul apartment', credit: 'deniz — istanbul.', piece: 'Onda Vase' },
+        { src: 'assets/hf_20260705_141939_219baa95-67b6-409f-af7f-6b8f586258da.png', alt: 'Clear rostrato vase with wildflowers on a timber windowsill in a coastal cottage', credit: 'sadie — byron bay.', piece: 'Mira Vase' },
+        { src: 'assets/hf_20260705_141940_2abf275e-41cd-468e-935b-270f8b32312c.png', alt: 'Clear rostrato vase with dried grasses on a walnut desk in a home library', credit: 'tom — london.', piece: 'Vesper Vase' },
+        { src: 'assets/hf_20260705_141942_da24ab67-dafb-4935-b3b2-a89bff0aa2e8.png', alt: 'Clear rostrato vase with an orchid stem beside a freestanding stone bath', credit: 'elena — ibiza.', piece: 'Alba Vase' },
+        { src: 'assets/hf_20260705_142222_d6f44bb9-bce8-4148-aad0-742e1f6172d9.png', alt: 'Clear rostrato vase with tulips in the bay window of a New York brownstone', credit: 'ruth — new york.', piece: 'Onda Vase' },
+        { src: 'assets/hf_20260705_142224_ff854bcf-18ab-4466-b4b0-f5c42fc185a7.png', alt: 'Clear rostrato vase with an olive branch in a plastered niche of a Marrakech riad', credit: 'yasmine — marrakech.', piece: 'Mira Vase' },
+        { src: 'assets/hf_20260705_142227_3be81b76-4c59-4d43-95d4-4abcb108496c.png', alt: 'Clear rostrato vase with white ranunculus on a birch sideboard in a Stockholm apartment', credit: 'elsa — stockholm.', piece: 'Alba Vase' },
+        { src: 'assets/hf_20260705_142231_65c94000-be21-4f6d-9c34-23f0134e5ab8.png', alt: 'Clear rostrato vase on a timber shelf against a pink plaster wall in Mexico City', credit: 'diego — mexico city.', piece: 'Vesper Vase' },
+        { src: 'assets/hf_20260705_142242_96d535d7-9eab-4b49-b0ac-41eddc77801c.png', alt: 'Clear rostrato vase with alpine wildflowers on a larch table in a Swiss chalet', credit: 'anna — zermatt.', piece: 'Mira Vase' },
+        { src: 'assets/hf_20260705_142244_4288028f-6686-43e8-bdba-bcecdebb3cdd.png', alt: 'Clear rostrato vase with a monstera leaf on a teak console in a Singapore high-rise', credit: 'wei — singapore.', piece: 'Vesper Vase' },
+        { src: 'assets/hf_20260705_142246_7c38a152-07a2-4605-a940-bdbb63574690.png', alt: 'Clear rostrato vase with sunflowers on a farmhouse kitchen table in a Tuscan villa', credit: 'lucia — florence.', piece: 'Onda Vase' },
+      ],
+      customerPhotosPage2: this._galleryP2 = [
+        { src: 'assets/hf_20260705_144449_55c2f450-c3a5-4ece-8778-68f5429150f7.png', alt: 'Clear rostrato vase with a pine branch on a low table in a Seoul hanok', credit: 'minji — seoul.', piece: 'Vesper Vase' },
+        { src: 'assets/hf_20260705_144453_06944db8-9d66-42ef-9baa-21781f131667.png', alt: 'Clear rostrato vase with orange dahlias on an azulejo-tiled kitchen shelf in Lisbon', credit: 'ines — lisbon.', piece: 'Mira Vase' },
+        { src: 'assets/hf_20260705_144454_c64465fc-adc0-4653-8bd6-f57eb424d942.png', alt: 'Clear rostrato vase with white peonies on a grand piano in a London townhouse', credit: 'arthur — london.', piece: 'Onda Vase' },
+        { src: 'assets/hf_20260705_144457_8e9c4c39-6218-4346-82b2-4c4c774eaecf.png', alt: 'Clear rostrato vase with proteas on a terrace table of a Cape Town cliff villa', credit: 'zola — cape town.', piece: 'Mira Vase' },
+        { src: 'assets/hf_20260705_144509_31aefaed-caf3-4ee8-952c-446e8eca8eaf.png', alt: 'Clear rostrato vase with a maple branch in a Kyoto machiya alcove', credit: 'haruka — kyoto.', piece: 'Alba Vase' },
+        { src: 'assets/hf_20260705_144512_1203b25f-3ea2-4775-ac19-4195cf7fcc34.png', alt: 'Clear rostrato vase on a marble bar in a Dubai penthouse at dusk', credit: 'omar — dubai.', piece: 'Vesper Vase' },
+        { src: 'assets/hf_20260705_144514_9512211d-dd41-4c68-8a61-a76de6839b38.png', alt: 'Clear rostrato vase with jasmine beside french doors in a Buenos Aires apartment', credit: 'valentina — buenos aires.', piece: 'Onda Vase' },
+        { src: 'assets/hf_20260705_144527_b3ad8430-839f-40f5-8d37-5e6ed56d12cd.png', alt: 'Clear rostrato vase with lemon branches on an Amalfi coast terrace table', credit: 'giulia — amalfi.', piece: 'Mira Vase' },
+        { src: 'assets/hf_20260705_144529_dcf368a5-42b1-4e03-a710-c55dd894a23c.png', alt: 'Clear rostrato vase with lavender on a pine table in a Provence farmhouse kitchen', credit: 'margaux — provence.', piece: 'Alba Vase' },
+      ],
+      customerPhotosShown: (this.state.galleryPage === 2 ? this._galleryP2 : this._galleryP1),
+      galleryPageLabel: 'page 0' + (this.state.galleryPage || 1) + ' / 02',
+      galleryPrev: () => {
+        if ((this.state.galleryPage || 1) === 2) {
+          this.setState({ galleryPage: 1 });
+          (document.scrollingElement || document.documentElement).scrollTop = 0;
+        }
+      },
+      galleryNext: () => {
+        if ((this.state.galleryPage || 1) === 1) {
+          this.setState({ galleryPage: 2 });
+          (document.scrollingElement || document.documentElement).scrollTop = 0;
+        }
+      },
+      galleryPrevStyle: {
+        font: "700 13px/1.2 'Courier Prime', monospace",
+        color: '#3B0A14',
+        cursor: (this.state.galleryPage || 1) === 2 ? 'pointer' : 'default',
+        opacity: (this.state.galleryPage || 1) === 2 ? 1 : 0.3,
+      },
+      galleryNextStyle: {
+        font: "700 13px/1.2 'Courier Prime', monospace",
+        color: '#3B0A14',
+        cursor: (this.state.galleryPage || 1) === 1 ? 'pointer' : 'default',
+        opacity: (this.state.galleryPage || 1) === 1 ? 1 : 0.3,
+      },
+      shopNavStyle: navStyle(view === 'home' || view === 'round'),
+      shopMenuOpen: this.state.shopMenuOpen,
+      openShopMenu: () => this.setState({ shopMenuOpen: true }),
+      closeShopMenu: () => this.setState({ shopMenuOpen: false }),
+      isRound: view === 'round',
+      goRound: () => this.goTo('round'),
+      roundFlowersAttr: String(!!this.state.roundFlowers),
+      roundFlowersLabel: this.state.roundFlowers ? 'flowers — remove ×' : 'flowers — add +',
+      toggleRoundFlowers: () => this.setState(st => ({ roundFlowers: !st.roundFlowers })),
+      openVesper: () => this.openProduct(2),
+      navItems: [
+        { label: 'Gallery', go: () => this.goTo('gallery'), style: navStyle(view === 'gallery') },
+        { label: 'Studio', go: () => this.goTo('studio'), style: navStyle(view === 'studio') },
+        { label: 'Journal', go: () => this.goTo('journal'), style: navStyle(view === 'journal') },
+        { label: 'Contact', go: () => this.goTo('contact'), style: navStyle(view === 'contact') },
+      ],
+      goHome: () => this.goTo('home'),
+      goStudio: () => this.goTo('studio'),
+      goContact: () => this.goTo('contact'),
+      scrollToPieces: () => {
+        const el = this._piecesEl;
+        if (el) {
+          const sc = document.scrollingElement || document.documentElement;
+          sc.scrollTo({ top: el.getBoundingClientRect().top + sc.scrollTop - 90, behavior: 'smooth' });
+        }
+      },
+      piecesRef: (el) => { this._piecesEl = el; },
+
+      searchOpen,
+      searchLabel: searchOpen ? 'Close ×' : 'Search',
+      toggleSearch: () => this.setState(s => ({ searchOpen: !s.searchOpen })),
+      searchQuery,
+      setQuery: (v) => this.setState({ searchQuery: v }),
+      searchResults,
+      searchEmpty: q.length > 0 && searchResults.length === 0,
+
+      heroSlides: heroImages.map((img, i) => ({ ...img, opacity: i === heroIndex ? 1 : 0 })),
+      heroCounter: String(heroIndex + 1).padStart(2, '0') + ' / 03',
+
+      catalogue,
+
+      galleryMainSrc: galleryAngles[galleryIndex].src,
+      galleryMainAlt: galleryAngles[galleryIndex].alt,
+      galleryCaption: galleryAngles[galleryIndex].caption,
+      galleryThumbs: galleryAngles.map((a, i) => ({
+        ...a,
+        select: () => this.setState({ galleryIndex: i }),
+        style: {
+          width: '88px',
+          height: '88px',
+          objectFit: 'cover',
+          display: 'block',
+          cursor: 'pointer',
+          border: i === galleryIndex ? '1px solid #3B0A14' : '1px solid #E9E2D6',
+          boxSizing: 'border-box',
+          transition: 'border-color 160ms cubic-bezier(0.22,1,0.36,1)',
+        },
+      })),
+
+      contactName: this.state.contactName,
+      contactEmail: this.state.contactEmail,
+      contactMessage: this.state.contactMessage,
+      setContactName: (v) => this.setState({ contactName: v }),
+      setContactEmail: (v) => this.setState({ contactEmail: v }),
+      setContactMessage: (e) => this.setState({ contactMessage: e && e.target ? e.target.value : e }),
+      ...(() => {
+        const prod = catalogue[this.state.productIndex] || catalogue[0];
+        const imgIdx = Math.min(this.state.productImageIndex, prod.gallery.length - 1);
+        return {
+          prodName: prod.name,
+          prodDescriptor: prod.descriptor,
+          prodPrice: prod.price,
+          prodDescription: prod.description,
+          prodDescription2: prod.description2,
+          prodDims: prod.dims,
+          prodSku: prod.sku,
+          prodMainSrc: prod.gallery[imgIdx].src,
+          prodMainAlt: prod.gallery[imgIdx].alt,
+          prodImageCaption: prod.gallery[imgIdx].caption,
+          prodMainStyle: {
+            aspectRatio: '4 / 5', width: '100%', objectFit: 'cover',
+            objectPosition: prod.gallery[imgIdx].pos || '50% 50%',
+            display: 'block', border: '1px solid #E9E2D6', boxSizing: 'border-box',
+          },
+          prodThumbs: prod.gallery.map((g, i) => ({
+            ...g,
+            select: () => this.setState({ productImageIndex: i }),
+            style: {
+              width: '72px', height: '72px', objectFit: 'cover', objectPosition: g.pos || '50% 50%', display: 'block', cursor: 'pointer',
+              border: i === imgIdx ? '1px solid #3B0A14' : '1px solid #E9E2D6',
+              boxSizing: 'border-box',
+              transition: 'border-color 160ms cubic-bezier(0.22,1,0.36,1)',
+            },
+          })),
+          prodAcquireLabel: 'Acquire — ' + prod.price,
+          prodNotAcquired: !this.state.acquired,
+          prodAcquired: this.state.acquired,
+          acquire: () => this.setState({ acquired: true }),
+          prodAccordion: [
+            { title: 'Materials', content: 'Lead-free clear crystal, blown and shaped entirely by hand in the Melbourne studio. ' + prod.dims + '.' },
+            { title: 'Care', content: 'Hand wash in lukewarm water with a soft cloth. Keep clear of dishwashers, direct heat and other vases — the points are sharper than they look.' },
+            { title: 'Shipping', content: 'Packed in moulded stone-wool and shipped worldwide, fully insured, from Melbourne within 5 business days. Free over $400 AUD.' },
+          ],
+          accordionStyle: { marginTop: '10px' },
+          prodOthers: catalogue.filter((_, i) => i !== this.state.productIndex),
+        };
+      })(),
+
+      filmRef: (el) => {
+        if (el && el !== this._filmEl) {
+          el.muted = true;
+          el.volume = 0;
+          el.addEventListener('volumechange', () => { if (!el.muted) el.muted = true; });
+          el.addEventListener('loadedmetadata', () => this._onFilmLoaded());
+          el.addEventListener('timeupdate', () => this._onFilmTime());
+        }
+        this._filmEl = el;
+      },
+      filmPaused: this.state.filmPaused,
+      filmButtonLabel: this.state.filmPaused ? 'Play' : 'Pause',
+      filmTimeLabel: this.state.filmTimeLabel,
+      toggleFilm: () => {
+        const v = this._filmEl;
+        if (!v) return;
+        if (v.paused) { v.play(); this.setState({ filmPaused: false }); }
+        else { v.pause(); this.setState({ filmPaused: true }); }
+      },
+
+      seekFilm: (e) => {
+        const v = this._filmEl;
+        if (!v || !v.duration) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const frac = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+        v.currentTime = frac * v.duration;
+      },
+      filmFillStyle: {
+        position: 'absolute',
+        left: 0,
+        width: this.state.filmPct + '%',
+        height: '3px',
+        background: '#FAF7F2',
+        transition: 'width 200ms linear',
+      },
+
+      contactSent: this.state.contactSent,
+      contactNotSent: !this.state.contactSent,
+      sendContact: () => this.setState({ contactSent: true }),
+    };
+  }
+}
+</script>
+</body>
+</html>

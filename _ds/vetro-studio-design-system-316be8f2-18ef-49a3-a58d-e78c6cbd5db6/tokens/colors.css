@@ -1,0 +1,45 @@
+/* vetro studio — color tokens */
+:root {
+  /* Burgundy scale (brand) — sampled from the wordmark (#3B0A14) */
+  --burgundy-950: #24060c;
+  --burgundy-900: #2f0810;
+  --burgundy-800: #3b0a14; /* brand core */
+  --burgundy-700: #521523;
+  --burgundy-600: #6b1f30;
+  --burgundy-500: #86303f;
+  --burgundy-300: #b97f88;
+  --burgundy-100: #ecdadd;
+  --burgundy-050: #f6eef0;
+
+  /* Warm neutrals — gallery ivory + stone */
+  --ivory-000: #ffffff;
+  --ivory-050: #faf7f2;  /* page background */
+  --ivory-100: #f4efe7;  /* alt section background */
+  --ivory-200: #e9e2d6;  /* hairlines on ivory */
+  --stone-400: #b3aa9e;
+  --stone-500: #8b8177;  /* muted text on ivory */
+  --ink-900: #211a17;    /* near-black warm ink */
+
+  /* Glass accents — the vase colourways */
+  --glass-smoke: #a9a29a;
+  --glass-rose:  #d8b6b0;
+  --glass-amber: #c69a68;
+  --glass-clear: #e8ebe9;
+
+  /* Semantic aliases */
+  --surface-page: var(--ivory-050);
+  --surface-card: var(--ivory-000);
+  --surface-alt: var(--ivory-100);
+  --surface-inverse: var(--burgundy-800);
+  --text-heading: var(--burgundy-800);
+  --text-body: var(--ink-900);
+  --text-muted: var(--stone-500);
+  --text-on-inverse: var(--ivory-050);
+  --border-hairline: var(--ivory-200);
+  --border-strong: var(--burgundy-800);
+  --accent: var(--burgundy-800);
+  --accent-hover: var(--burgundy-700);
+  --focus-ring: var(--burgundy-500);
+  --state-error: #8c2f22;
+  --state-success: #4c5d3a;
+}

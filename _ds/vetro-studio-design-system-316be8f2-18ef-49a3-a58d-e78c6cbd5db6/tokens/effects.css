@@ -1,0 +1,19 @@
+/* vetro studio — radius, shadow, motion */
+:root {
+  /* Corners: square by default (gallery feel); 2px only on tiny elements */
+  --radius-0: 0px;
+  --radius-xs: 2px;
+  --radius-pill: 999px; /* badges only */
+
+  /* Shadows: near-none; depth comes from hairlines + tone */
+  --shadow-card: 0 1px 0 rgba(59, 10, 20, 0.06);
+  --shadow-overlay: 0 24px 64px rgba(36, 6, 12, 0.18);
+
+  /* Motion: slow, calm fades — no bounces */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */
+  --duration-fast: 160ms; /* @kind other */
+  --duration-slow: 420ms; /* @kind other */
+
+  /* States */
+  --hover-tint: rgba(59, 10, 20, 0.04);
+}

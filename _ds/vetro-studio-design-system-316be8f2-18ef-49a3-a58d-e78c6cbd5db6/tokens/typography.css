@@ -1,0 +1,28 @@
+/* vetro studio — typography tokens */
+:root {
+  --font-serif-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-sans: 'Jost', 'Helvetica Neue', sans-serif;
+  --font-mono-brand: 'Courier Prime', 'Courier New', monospace;
+
+  /* Scale */
+  --text-display: 500 clamp(44px, 5.2vw, 76px)/1.04 var(--font-serif-display);
+  --text-h1: 500 44px/1.1 var(--font-serif-display);
+  --text-h2: 500 32px/1.15 var(--font-serif-display);
+  --text-h3: 500 24px/1.25 var(--font-serif-display);
+  --text-body-lg: 300 18px/1.65 var(--font-sans);
+  --text-body: 400 15px/1.6 var(--font-sans);
+  --text-small: 400 13px/1.5 var(--font-sans);
+  --text-label: 500 12px/1.2 var(--font-sans);      /* + --tracking-label, uppercase */
+  --text-brand-mono: 700 16px/1.2 var(--font-mono-brand); /* wordmark-style, lowercase */
+
+  --tracking-label: 0.18em;
+  --tracking-wide: 0.08em;
+}
+
+body {
+  margin: 0;
+  font: var(--text-body);
+  color: var(--text-body);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+}
